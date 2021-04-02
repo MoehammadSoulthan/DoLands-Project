@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/gradient_popup">
+
+    <TextView
+        android:id="@+id/text_skip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:text="Skip"
+        android:fontFamily="@font/quicksand"
+        android:textSize="11dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/gray_dark"
+        android:layout_gravity="end" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="25dp"
+        android:layout_gravity="center"
+        android:text="You need to login to continue"
+        android:fontFamily="@font/quicksand"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:letterSpacing="0.10"
+        android:textSize="16dp"/>
+
+    <Button
+        android:id="@+id/button_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:minHeight="0dp"
+        android:text="Ok, take me to login"
+        android:fontFamily="@font/montserrat"
+        android:textAllCaps="false"
+        android:background="@drawable/round_button"
+        android:layout_marginBottom="20dp"/>
+
+</LinearLayout>

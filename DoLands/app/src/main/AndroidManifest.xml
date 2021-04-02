@@ -12,19 +12,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoLands">
+        <activity android:name=".ExploreDetailActivity"
+            android:parentActivityName=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek" />
 
-        <activity android:name=".EditProfileActivity"
-            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
-            android:parentActivityName=".ProfileActivity"/>
+        <activity
+            android:name=".EditProfileActivity"
+            android:parentActivityName=".ProfileActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".ProfileActivity"
             android:label="My Profile"
-            android:theme="@style/Theme.DoLands.NoActionBar"/>
+            android:theme="@style/Theme.DoLands.NoActionBar" />
         <activity
             android:name=".ExploreActivity"
             android:theme="@style/Theme.DoLands.NoActionBar">
