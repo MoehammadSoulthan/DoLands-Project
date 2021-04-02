@@ -12,9 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoLands">
-        <activity android:name=".ExploreDetailActivity"
+        <activity android:name=".ReviewActivity"
             android:parentActivityName=".ExploreActivity"
-            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"/>
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
+        <activity
+            android:name=".ExploreDetailActivity"
+            android:parentActivityName=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
