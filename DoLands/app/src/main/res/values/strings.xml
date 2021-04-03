@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">DoLands</string>
+    <string name="username">Username</string>
+    <string name="edit_pp">Edit Profile Photo</string>
+    <string name="save">save</string>
+    <string name="edit_name">Edit name...</string>
+    <string name="edit_bio">Edit bio...</string>
+    <string name="searching">Type location</string>
+    <string name="nearby">Nearby Attractions</string>
+    <string name="attract_name">Disneyland</string>
+    <string name="btn_detail">Detail</string>
+    <string name="btn_review">Review</string>
+    <string name="detail_location">Location</string>
+    <string name="isi_detail_location">RT.12/RW.06, Gn. Princi, \nJatiarjo, Kec. Prigen, \nPasuruan, Jawa Timur 67157</string>
+    <string name="detail_time">Open Hours</string>
+    <string name="isi_detail_time">Senin - Jumat\n10.00 - 21.00 WIB\nSabtu - Minggu\n09.00 - 22.00 WIB</string>
+    <string name="detail_contact">Contact</string>
+    <string name="isi_detail_contact">021-911\n021-911\nwww.website123.com</string>
+    <string name="btn_send">Send</string>
+    <string name="isi_review">Tempat wisatanya bagus banget, lokaisnya juga strategis, suka deh pokoknya.</string>
+    <string name="write_review">Write a review...</string>
+    <string name="fullname">Full Name</string>
+    <string name="bio">Bio</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="_my_review">My Review</string>
+    <string name="saved">Saved</string>
+    <string name="no_review_yet">You Have No Review Yet</string>
+    <string name="to_login">Ok, take me to login</string>
+    <string name="skip">Skip</string>
+    <string name="need_login">You need to login to continue</string>
+    <string name="explr">Explore</string>
+    <string name="prfl">Profile</string>
 </resources>

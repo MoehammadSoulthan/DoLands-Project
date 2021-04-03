@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:background="@android:color/transparent"
-                android:hint="Type location or place name"
+                android:hint="@string/searching"
                 android:textColorHint="@color/gray_dark"
                 android:textColor="@color/black"
                 android:fontFamily="@font/questrial"
@@ -62,7 +62,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nearby Attractions"
+                    android:text="@string/nearby"
                     android:textColor="@color/brown"
                     android:textSize="18dp"
                     android:fontFamily="@font/quicksand"/>
@@ -97,7 +97,7 @@
                             android:layout_alignParentRight="true"
                             android:gravity="end"
                             android:layout_marginBottom="15dp"
-                            android:text="Disneyland"
+                            android:text="@string/attract_name"
                             android:textColor="@color/white"
                             android:textSize="17dp"
                             android:fontFamily="@font/quicksand"

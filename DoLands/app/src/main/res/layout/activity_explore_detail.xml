@@ -19,7 +19,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="Disneyland"
+            android:text="@string/attract_name"
             android:textAllCaps="true"
             android:textSize="23dp"
             android:textColor="@color/brown"
@@ -30,8 +30,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"
-            android:text="Disneyland"/>
+            android:layout_weight="5"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +48,7 @@
             android:layout_weight="1"
             android:backgroundTint="@color/brown"
             android:minHeight="0dp"
-            android:text="Detail"
+            android:text="@string/btn_detail"
             android:textAllCaps="false"
             android:fontFamily="@font/montserrat"
             android:textSize="13dp"
@@ -64,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="0dp"
-            android:text="Review"
+            android:text="@string/btn_review"
             android:textAllCaps="false"
             android:textColor="@color/brown"
             android:fontFamily="@font/montserrat"
@@ -100,7 +99,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="@string/detail_location"
                     android:textSize="21dp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
@@ -112,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="RT.12/RW.06, Gn. Princi, \nJatiarjo, Kec. Prigen, \nPasuruan, Jawa Timur 67157"
+                android:text="@string/isi_detail_location"
                 android:textSize="16dp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
@@ -135,7 +134,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Open Hours"
+                    android:text="@string/detail_time"
                     android:textSize="21dp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
@@ -147,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="Senin - Jumat\n10.00 - 21.00 WIB\nSabtu - Minggu\n09.00 - 22.00 WIB"
+                android:text="@string/isi_detail_time"
                 android:textSize="16dp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
@@ -165,7 +164,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Contact"
+                    android:text="@string/detail_contact"
                     android:textSize="21dp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
@@ -177,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:text="021-911\n021-911\nwww.website123.com"
+                android:text="@string/isi_detail_contact"
                 android:textSize="16dp"
                 android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
