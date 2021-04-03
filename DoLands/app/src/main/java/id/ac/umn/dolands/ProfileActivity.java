@@ -15,12 +15,14 @@ package id.ac.umn.dolands;
         import android.view.View;
         import android.widget.Button;
         import android.widget.ImageButton;
+        import android.widget.TextView;
 
         import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProfileActivity extends AppCompatActivity {
     Button btnEditProfile;
     ImageButton imgBtnExit;
+    TextView tvSaved;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +30,23 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         imgBtnExit = findViewById(R.id.imgbutton_exit);
         btnEditProfile = findViewById(R.id.button_editprofile);
+        tvSaved = findViewById(R.id.text_saved);
+
+        tvSaved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfileActivity.this, ProfileSavedActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

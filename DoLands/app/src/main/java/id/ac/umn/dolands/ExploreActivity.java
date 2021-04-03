@@ -111,6 +111,7 @@ public class ExploreActivity extends AppCompatActivity {
                             @Override
                             public void  onClick(View v) {
                                 startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
+
                                 overridePendingTransition(0,0);
                             }
                         });

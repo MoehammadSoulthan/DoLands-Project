@@ -9,20 +9,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ExploreReviewActivity extends AppCompatActivity {
     Button btnDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_review);
+        setContentView(R.layout.activity_explore_review);
         btnDetail = findViewById(R.id.button_detail);
 
         btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ReviewActivity.this, ExploreDetailActivity.class);
+                Intent intent = new Intent(ExploreReviewActivity.this, ExploreDetailActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 

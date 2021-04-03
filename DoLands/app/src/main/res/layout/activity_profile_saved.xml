@@ -112,13 +112,14 @@
                 android:layout_weight="2.5"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/text_my_review"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="My Review"
                     android:textSize="21.5dp"
-                    android:textColor="@color/brown"
+                    android:textColor="@color/yellow"
                     android:fontFamily="@font/montserrat"
                     android:textStyle="bold"
                     android:letterSpacing="0.07"/>
@@ -131,16 +132,14 @@
                     <ImageView
                         android:layout_width="37dp"
                         android:layout_height="37dp"
-                        android:src="@drawable/ic_bookmark"
-                        app:tint="@color/yellow" />
+                        android:src="@drawable/ic_bookmark" />
                     <TextView
-                        android:id="@+id/text_saved"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Saved"
                         android:textSize="21.5dp"
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/brown"
                         android:fontFamily="@font/montserrat"
                         android:textStyle="bold"
                         android:letterSpacing="0.07"/>
@@ -149,17 +148,130 @@
             </LinearLayout>
 
         </LinearLayout>
-        <TextView
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1.3"
-            android:text="You Have No Reviews Yet"
-            android:textStyle="bold|italic"
-            android:textSize="20dp"
-            android:letterSpacing="0.05"
-            android:textColor="@color/gray"
-            android:fontFamily="@font/questrial"
-            android:gravity="center"/>
+            android:orientation="vertical"
+            android:layout_weight="1.3">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RelativeLayout
+                    android:id="@+id/saved_attract1"
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                        android:src="@drawable/disney3"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparency"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="end"
+                        android:layout_marginBottom="15dp"
+                        android:text="Wisata Bahari Lamongan"
+                        android:textColor="@color/white"
+                        android:textSize="17dp"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                        android:src="@drawable/disney1"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparency"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="end"
+                        android:layout_marginBottom="15dp"
+                        android:text="Disneyland"
+                        android:textColor="@color/white"
+                        android:textSize="17dp"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                        android:src="@drawable/disney2"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparency"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="end"
+                        android:layout_marginBottom="15dp"
+                        android:text="Taman Mini Indonesia Indah"
+                        android:textColor="@color/white"
+                        android:textSize="17dp"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="150dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="15dp">
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        app:shapeAppearanceOverlay="@style/roundedImageView"
+                        android:src="@drawable/disney1"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/transparency"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:gravity="end"
+                        android:layout_marginBottom="15dp"
+                        android:text="Dunia Fantasi"
+                        android:textColor="@color/white"
+                        android:textSize="17dp"
+                        android:fontFamily="@font/quicksand"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </RelativeLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
 
     </LinearLayout>
 

@@ -3,6 +3,7 @@
     package="id.ac.umn.dolands">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -12,7 +13,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoLands">
-        <activity android:name=".ReviewActivity"
+
+        <activity
+            android:name=".ExploreReviewActivity"
             android:parentActivityName=".ExploreActivity"
             android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
         <activity
@@ -32,6 +35,8 @@
         <activity
             android:name=".ProfileActivity"
             android:label="My Profile"
+            android:theme="@style/Theme.DoLands.NoActionBar" />
+        <activity android:name=".ProfileSavedActivity"
             android:theme="@style/Theme.DoLands.NoActionBar" />
         <activity
             android:name=".ExploreActivity"
