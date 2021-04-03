@@ -58,6 +58,9 @@ public class ExploreDetailActivity extends AppCompatActivity implements OnMapRea
         LatLng Safari = new LatLng(-7.759321,112.667188);
         gMap.addMarker(new MarkerOptions().position(Safari).title("Taman Safari Prigen"));
         gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Safari,15));
+
+        gMap.getUiSettings().setScrollGesturesEnabled(false);
+        gMap.getUiSettings().setZoomGesturesEnabled(false);
     }
 
 }

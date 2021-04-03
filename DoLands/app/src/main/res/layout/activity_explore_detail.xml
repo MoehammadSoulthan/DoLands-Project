@@ -80,7 +80,9 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
+        android:layout_marginRight="15dp"
+        android:padding="7dp"
+        android:background="@drawable/gradient">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -93,13 +95,14 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_location"/>
+                    android:src="@drawable/ic_location"
+                    app:tint="@color/white" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Location"
                     android:textSize="21dp"
-                    android:textColor="@color/brown"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
                     android:textStyle="bold"
                     android:letterSpacing="0.07"/>
@@ -111,14 +114,14 @@
                 android:layout_marginLeft="40dp"
                 android:text="RT.12/RW.06, Gn. Princi, \nJatiarjo, Kec. Prigen, \nPasuruan, Jawa Timur 67157"
                 android:textSize="16dp"
-                android:textColor="@color/brown"
+                android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
                 android:letterSpacing="0.03"/>
             <fragment
                 android:id="@+id/attract_map"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
-                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+                android:name="com.google.android.gms.maps.SupportMapFragment" />
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,13 +130,14 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_time"/>
+                    android:src="@drawable/ic_time"
+                    app:tint="@color/white"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Open Hours"
                     android:textSize="21dp"
-                    android:textColor="@color/brown"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
                     android:textStyle="bold"
                     android:letterSpacing="0.07"/>
@@ -145,7 +149,7 @@
                 android:layout_marginLeft="40dp"
                 android:text="Senin - Jumat\n10.00 - 21.00 WIB\nSabtu - Minggu\n09.00 - 22.00 WIB"
                 android:textSize="16dp"
-                android:textColor="@color/brown"
+                android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
                 android:letterSpacing="0.03"/>
             <LinearLayout
@@ -156,13 +160,14 @@
                 <ImageView
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:src="@drawable/ic_contact"/>
+                    android:src="@drawable/ic_contact"
+                    app:tint="@color/white"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Contact"
                     android:textSize="21dp"
-                    android:textColor="@color/brown"
+                    android:textColor="@color/white"
                     android:fontFamily="@font/quicksand"
                     android:textStyle="bold"
                     android:letterSpacing="0.07"/>
@@ -174,7 +179,7 @@
                 android:layout_marginLeft="40dp"
                 android:text="021-911\n021-911\nwww.website123.com"
                 android:textSize="16dp"
-                android:textColor="@color/brown"
+                android:textColor="@color/white"
                 android:fontFamily="@font/quicksand"
                 android:letterSpacing="0.03"/>
         </LinearLayout>
