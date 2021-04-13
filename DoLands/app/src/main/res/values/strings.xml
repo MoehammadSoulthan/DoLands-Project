@@ -5,7 +5,7 @@
     <string name="save">save</string>
     <string name="edit_name">Edit name...</string>
     <string name="edit_bio">Edit bio...</string>
-    <string name="searching">Type location</string>
+    <string name="searching">Type Location</string>
     <string name="nearby">Nearby Attractions</string>
     <string name="attract_name">Disneyland</string>
     <string name="btn_detail">Detail</string>
@@ -25,9 +25,9 @@
     <string name="_my_review">My Review</string>
     <string name="saved">Saved</string>
     <string name="no_review_yet">You Have No Review Yet</string>
-    <string name="to_login">Ok, take me to login</string>
+    <string name="to_login">Login</string>
     <string name="skip">Skip</string>
-    <string name="need_login">You need to login to continue</string>
+    <string name="need_login">Login to Continue</string>
     <string name="explr">Explore</string>
     <string name="prfl">Profile</string>
     <string name="dolands">DoLands</string>

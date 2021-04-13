@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -37,17 +38,19 @@ public class ExploreActivity extends AppCompatActivity {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     ImageView ivAttract1,ivAttract2,ivAttract3,ivAttract4;
+    private long backPressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
+
         ivAttract1 = (ImageView) findViewById(R.id.attract1);
         ivAttract2 = (ImageView) findViewById(R.id.attract2);
         ivAttract3 = (ImageView) findViewById(R.id.attract3);
         ivAttract4 = (ImageView) findViewById(R.id.attract4);
 
-        //intent ke detail
+        // Intent to Detail
         ivAttract1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +58,7 @@ public class ExploreActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         ivAttract2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,6 +66,7 @@ public class ExploreActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         ivAttract3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +74,7 @@ public class ExploreActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         ivAttract4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +83,7 @@ public class ExploreActivity extends AppCompatActivity {
             }
         });
 
-        //maps
+        // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
         client = LocationServices.getFusedLocationProviderClient(this);
 
@@ -88,7 +94,7 @@ public class ExploreActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
-        //menu bottom
+        // Menu Bottom
         BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
 
         bottomNavigationView.setSelectedItemId(R.id.nav_explore);
@@ -131,9 +137,24 @@ public class ExploreActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 
-    //maps
+    // Back To Exit
+    @Override
+    public void onBackPressed() {
+        if(backPressedTime + 2000 > System.currentTimeMillis()) {
+            finish();
+            super.onBackPressed();
+            return;
+        } else {
+            Toast.makeText(getBaseContext(), "Back Again To Exit", Toast.LENGTH_SHORT).show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
+    }
+
+    // Maps
     private void getCurrentLocation() {
         @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -155,7 +176,7 @@ public class ExploreActivity extends AppCompatActivity {
         });
     }
 
-    //maps
+    // Maps
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44){
