@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         btnLogin = findViewById(R.id.button_login);
         btnSkipLogin = findViewById(R.id.button_skip_login);
         tvToSignup = findViewById(R.id.text_click_to_signup);
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
             }
         });
+
         btnSkipLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
             }
         });
+
         tvToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,5 +47,7 @@ public class MainActivity extends AppCompatActivity {
 //                finish();
             }
         });
+
     }
+
 }
