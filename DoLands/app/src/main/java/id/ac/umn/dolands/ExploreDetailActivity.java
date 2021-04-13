@@ -42,7 +42,7 @@ public class ExploreDetailActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-        //settingan action bar
+        // Settingan Action Bar
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         getSupportActionBar().setElevation(0);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_back);
