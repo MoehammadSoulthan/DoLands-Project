@@ -13,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoLands">
-
+        <activity android:name=".SignupActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"/>
         <activity
             android:name=".ExploreReviewActivity"
             android:parentActivityName=".ExploreActivity"
@@ -31,13 +32,15 @@
             android:name=".EditProfileActivity"
             android:parentActivityName=".ProfileActivity"
             android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
-        <activity android:name=".ExploreActivity"
-            android:theme="@style/Theme.DoLands.NoActionBar"/>
+        <activity
+            android:name=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar" />
         <activity
             android:name=".ProfileActivity"
             android:label="My Profile"
             android:theme="@style/Theme.DoLands.NoActionBar" />
-        <activity android:name=".ProfileSavedActivity"
+        <activity
+            android:name=".ProfileSavedActivity"
             android:theme="@style/Theme.DoLands.NoActionBar" />
         <activity
             android:name=".MainActivity"
