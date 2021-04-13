@@ -31,7 +31,8 @@
             android:name=".EditProfileActivity"
             android:parentActivityName=".ProfileActivity"
             android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"/>
         <activity
             android:name=".ProfileActivity"
             android:label="My Profile"
@@ -39,7 +40,7 @@
         <activity android:name=".ProfileSavedActivity"
             android:theme="@style/Theme.DoLands.NoActionBar" />
         <activity
-            android:name=".ExploreActivity"
+            android:name=".MainActivity"
             android:theme="@style/Theme.DoLands.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
