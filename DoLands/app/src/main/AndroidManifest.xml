@@ -13,44 +13,59 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoLands">
+
         <activity android:name=".SignupActivity"
-            android:theme="@style/Theme.DoLands.NoActionBar"/>
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ExploreReviewActivity"
             android:parentActivityName=".ExploreActivity"
-            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ExploreDetailActivity"
             android:parentActivityName=".ExploreActivity"
-            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek" />
+            android:value="AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek"/>
 
         <activity
             android:name=".EditProfileActivity"
             android:parentActivityName=".ProfileActivity"
-            android:theme="@style/Theme.DoLands.RemoveShadowActionBar" />
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ExploreActivity"
-            android:theme="@style/Theme.DoLands.NoActionBar" />
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ProfileActivity"
             android:label="My Profile"
-            android:theme="@style/Theme.DoLands.NoActionBar" />
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".ProfileSavedActivity"
-            android:theme="@style/Theme.DoLands.NoActionBar" />
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.DoLands.NoActionBar">
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>
