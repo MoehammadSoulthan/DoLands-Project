@@ -14,7 +14,7 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        //settingan action bar
+        // Setting Action Bar
 //        getSupportActionBar().setTitle(Html.fromHtml("<font color=\"yellow\">"));
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
         getSupportActionBar().setElevation(0);
