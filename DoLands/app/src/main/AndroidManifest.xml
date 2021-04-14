@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="id.ac.umn.dolands">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+<<<<<<< HEAD
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity"></activity>
         <activity
@@ -20,12 +25,62 @@
         <activity
             android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
+=======
+        android:theme="@style/Theme.DoLands">
+
+        <activity android:name=".SignupActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ExploreReviewActivity"
+            android:parentActivityName=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ExploreDetailActivity"
+            android:parentActivityName=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek"/>
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:parentActivityName=".ProfileActivity"
+            android:theme="@style/Theme.DoLands.RemoveShadowActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ExploreActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:label="My Profile"
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".ProfileSavedActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.DoLands.NoActionBar"
+            android:screenOrientation="portrait">
+>>>>>>> eef75f10dd6697d2a54c7fb4d9898694cf5f0d4d
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>

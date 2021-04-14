@@ -1,6 +1,50 @@
 <resources>
     <string name="app_name">DoLands</string>
+<<<<<<< HEAD
     <string name="app_name_login">Login</string>
     <string name="buttonprof">Profil</string>
     <string name="buttonlog">Login</string>
+=======
+    <string name="username">Username</string>
+    <string name="edit_pp">Edit Profile Photo</string>
+    <string name="save">save</string>
+    <string name="edit_name">Edit name...</string>
+    <string name="edit_bio">Edit bio...</string>
+    <string name="searching">Type Location</string>
+    <string name="nearby">Nearby Attractions</string>
+    <string name="attract_name">Disneyland</string>
+    <string name="btn_detail">Detail</string>
+    <string name="btn_review">Review</string>
+    <string name="detail_location">Location</string>
+    <string name="isi_detail_location">RT.12/RW.06, Gn. Princi, \nJatiarjo, Kec. Prigen, \nPasuruan, Jawa Timur 67157</string>
+    <string name="detail_time">Open Hours</string>
+    <string name="isi_detail_time">Senin - Jumat\n10.00 - 21.00 WIB\nSabtu - Minggu\n09.00 - 22.00 WIB</string>
+    <string name="detail_contact">Contact</string>
+    <string name="isi_detail_contact">081-911\n081-911\nwww.dolands.com</string>
+    <string name="btn_send">Send</string>
+    <string name="isi_review">Tempat wisatanya bagus banget, lokasinya juga strategis, suka deh pokoknya.</string>
+    <string name="write_review">Write a review...</string>
+    <string name="fullname">Full Name</string>
+    <string name="bio">Bio</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="_my_review">My Review</string>
+    <string name="saved">Saved</string>
+    <string name="no_review_yet">You Have No Review Yet</string>
+    <string name="to_login">Login</string>
+    <string name="skip">Skip</string>
+    <string name="need_login">Login to Continue</string>
+    <string name="explr">Explore</string>
+    <string name="prfl">Profile</string>
+    <string name="dolands">DoLands</string>
+    <string name="password">Password</string>
+    <string name="click_to_signup">Click Here to Sign Up</string>
+    <string name="login">Login</string>
+    <string name="click_to_login">Click Here to Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="upload_pp">Upload Profile Photo</string>
+    <string name="email">E-Mail</string>
+    <string name="name">Name</string>
+    <string name="repassword">Re-type Password</string>
+    <string name="dob">Date of Birth</string>
+>>>>>>> eef75f10dd6697d2a54c7fb4d9898694cf5f0d4d
 </resources>
