@@ -28,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
         imgBtnExit = findViewById(R.id.imgbutton_exit);
         btnEditProfile = findViewById(R.id.button_editprofile);
         tvSaved = findViewById(R.id.text_saved);

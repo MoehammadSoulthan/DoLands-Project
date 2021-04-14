@@ -26,6 +26,7 @@ public class ProfileSavedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_saved);
+
         imgBtnExit = findViewById(R.id.imgbutton_exit);
         btnEditProfile = findViewById(R.id.button_editprofile);
         tvMyReview = findViewById(R.id.text_my_review);
@@ -102,5 +103,6 @@ public class ProfileSavedActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
 }

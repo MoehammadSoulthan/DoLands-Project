@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">DoLands</string>
-<<<<<<< HEAD
-    <string name="app_name_login">Login</string>
-    <string name="buttonprof">Profil</string>
-    <string name="buttonlog">Login</string>
-=======
     <string name="username">Username</string>
     <string name="edit_pp">Edit Profile Photo</string>
     <string name="save">save</string>
@@ -46,5 +41,4 @@
     <string name="name">Name</string>
     <string name="repassword">Re-type Password</string>
     <string name="dob">Date of Birth</string>
->>>>>>> eef75f10dd6697d2a54c7fb4d9898694cf5f0d4d
 </resources>

@@ -6,14 +6,9 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-<<<<<<< HEAD
-    <color name="white">#FFFFFF</color>
-    <color name="green">#FFCA42</color>
-=======
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFCA42</color>
     <color name="brown">#443e3e</color>
     <color name="gray_dark">#A39D9D</color>
     <color name="gray">#e5e5e5</color>
->>>>>>> eef75f10dd6697d2a54c7fb4d9898694cf5f0d4d
 </resources>

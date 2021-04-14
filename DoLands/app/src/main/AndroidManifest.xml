@@ -12,20 +12,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-<<<<<<< HEAD
-        android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"></activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-
-            <!-- Hapus Intent filter MainActivity -->
-        </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/SplashTheme">
-=======
         android:theme="@style/Theme.DoLands">
 
         <activity android:name=".SignupActivity"
@@ -74,7 +60,6 @@
             android:name=".MainActivity"
             android:theme="@style/Theme.DoLands.NoActionBar"
             android:screenOrientation="portrait">
->>>>>>> eef75f10dd6697d2a54c7fb4d9898694cf5f0d4d
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
