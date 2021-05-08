@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="15dp"
     tools:context=".MainActivity">
 
     <TextView
@@ -17,14 +16,18 @@
         android:gravity="bottom|center"
         android:fontFamily="@font/rakkas"
         android:textSize="55sp"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="30dp"
+        android:shadowColor="@color/yellow"
+        android:shadowDx="8"
+        android:shadowDy="4"
+        android:shadowRadius="2"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="40dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,11 +44,13 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:background="@android:color/transparent"
-                android:hint="@string/username"
+                android:hint="@string/emailOrUname"
+                android:inputType="text"
                 android:textColorHint="@color/gray_dark"
                 android:textColor="@color/black"
                 android:fontFamily="@font/quicksand"
-                android:textSize="16sp"/>
+                android:textSize="16sp"
+                android:autofillHints=""/>
         </LinearLayout>
 
         <LinearLayout
@@ -73,10 +78,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/button_login"
@@ -88,27 +93,30 @@
                 android:fontFamily="@font/montserrat"
                 android:textStyle="bold"
                 android:textSize="13sp"
-                android:background="@drawable/round_button"/>
+                android:textAllCaps="false"
+                android:background="@drawable/round_button"
+                android:foreground="?android:attr/selectableItemBackground"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/text_click_to_signup"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="0.3"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/click_to_signup"
             android:textColor="@color/gray_dark"
             android:fontFamily="@font/questrial"
-            android:textSize="12sp"/>
+            android:textSize="13sp"
+            android:layout_marginTop="15dp"/>
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.7"
-        android:gravity="end|bottom">
+        android:gravity="end|bottom"
+        android:padding="15dp">
         <Button
             android:id="@+id/button_skip_login"
             android:layout_width="wrap_content"
@@ -117,7 +125,8 @@
             android:minHeight="0dp"
             android:text="@string/skip"
             android:fontFamily="@font/montserrat"
-            android:letterSpacing="0.06"/>
+            android:letterSpacing="0.06"
+            android:foreground="?android:attr/selectableItemBackground"/>
     </LinearLayout>
 
 </LinearLayout>

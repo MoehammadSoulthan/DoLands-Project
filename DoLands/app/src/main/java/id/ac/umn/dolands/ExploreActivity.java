@@ -116,8 +116,8 @@ public class ExploreActivity extends AppCompatActivity {
                         btn_ok.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void  onClick(View v) {
+                                popup.dismiss();
                                 startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-
                                 overridePendingTransition(0,0);
                             }
                         });
