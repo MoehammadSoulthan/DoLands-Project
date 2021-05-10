@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginVertical="20dp"
+    android:layout_marginVertical="40dp"
     android:layout_marginHorizontal="15dp"
     tools:context=".SignupActivity">
 
@@ -90,31 +90,31 @@
             android:inputType="text"/>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.2"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:padding="6dp"
-        android:background="@drawable/edit_text">
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="0.2"/>-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:padding="6dp"-->
+<!--        android:background="@drawable/edit_text">-->
 
-        <EditText
-            android:id="@+id/input_dob"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@android:color/transparent"
-            android:hint="@string/dob"
-            android:textColorHint="@color/gray_dark"
-            android:textColor="@color/black"
-            android:fontFamily="@font/quicksand"
-            android:textSize="16dp"
-            android:gravity="center_vertical"
-            android:inputType="datetime"/>
-    </LinearLayout>
+<!--        <EditText-->
+<!--            android:id="@+id/input_dob"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginLeft="5dp"-->
+<!--            android:layout_marginRight="5dp"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:hint="@string/dob"-->
+<!--            android:textColorHint="@color/gray_dark"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:fontFamily="@font/quicksand"-->
+<!--            android:textSize="16dp"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:inputType="datetime"/>-->
+<!--    </LinearLayout>-->
 
     <View
         android:layout_width="match_parent"
