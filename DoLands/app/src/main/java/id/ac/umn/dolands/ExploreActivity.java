@@ -33,12 +33,23 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ExploreActivity extends AppCompatActivity {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
-    ImageView ivAttract1,ivAttract2,ivAttract3,ivAttract4;
+    ImageView ivAttract1, ivAttract2, ivAttract3, ivAttract4;
     private long backPressedTime;
+
+    private FirebaseUser user;
+    private DatabaseReference reference;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +94,9 @@ public class ExploreActivity extends AppCompatActivity {
             }
         });
 
+        // User Login
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
         // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -103,34 +117,39 @@ public class ExploreActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_profile:
-                        //popup alert login
-                        Dialog popup = new Dialog(ExploreActivity.this);
-                        popup.setContentView(R.layout.popup_login);
+                        if(user == null) {
+                            // Popup Alert Login
+                            Dialog popup = new Dialog(ExploreActivity.this);
+                            popup.setContentView(R.layout.popup_login);
 
-                        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                        popup.setCancelable(false);
+                            popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            popup.setCancelable(false);
 
-                        Button btn_ok = popup.findViewById(R.id.button_ok);
-                        TextView tv_skip = popup.findViewById(R.id.text_skip);
+                            Button btn_ok = popup.findViewById(R.id.button_ok);
+                            TextView tv_skip = popup.findViewById(R.id.text_skip);
 
-                        btn_ok.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void  onClick(View v) {
-                                popup.dismiss();
-                                startActivity(new Intent(getApplicationContext(),ProfileActivity.class));
-                                overridePendingTransition(0,0);
-                            }
-                        });
+                            btn_ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void  onClick(View v) {
+                                    popup.dismiss();
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                    finishAffinity();
+                                }
+                            });
 
-                        tv_skip.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void  onClick(View v) {
-                                bottomNavigationView.setSelectedItemId(R.id.nav_explore);
-                                popup.dismiss();
-                            }
-                        });
-                        popup.show();
-                        return true;
+                            tv_skip.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void  onClick(View v) {
+                                    bottomNavigationView.setSelectedItemId(R.id.nav_explore);
+                                    popup.dismiss();
+                                }
+                            });
+                            popup.show();
+                            return true;
+                        } else {
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            overridePendingTransition(0,0);
+                        }
                     case R.id.nav_explore:
                         return true;
                 }
@@ -144,8 +163,9 @@ public class ExploreActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if(backPressedTime + 2000 > System.currentTimeMillis()) {
-            finish();
+            finishAffinity();
             super.onBackPressed();
+            System.exit(0);
             return;
         } else {
             Toast.makeText(getBaseContext(), "Back Again To Exit", Toast.LENGTH_SHORT).show();

@@ -41,5 +41,5 @@
     <string name="name">Name</string>
     <string name="repassword">Re-type Password</string>
     <string name="dob">Date of Birth</string>
-    <string name="emailOrUname">Email or Username</string>
+    <string name="emailOrUname">Email Address</string>
 </resources>

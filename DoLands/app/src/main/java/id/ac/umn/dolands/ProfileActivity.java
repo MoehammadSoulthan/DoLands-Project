@@ -16,8 +16,10 @@ package id.ac.umn.dolands;
         import android.widget.Button;
         import android.widget.ImageButton;
         import android.widget.TextView;
+        import android.widget.Toast;
 
         import com.google.android.material.bottomnavigation.BottomNavigationView;
+        import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity {
     Button btnEditProfile;
@@ -55,14 +57,19 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-                alert.setMessage("Are You Sure to Exit?");
+                alert.setMessage("Are You Sure to Logout?");
                 alert.setCancelable(true);
 
                 alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+//                        finishAffinity();
+//                        System.exit(0);
+
+                        FirebaseAuth.getInstance().signOut();
+                        BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
+                        bottomNavigationView.setSelectedItemId(R.id.nav_explore);
                         finishAffinity();
-                        System.exit(0);
                     }
                 });
 
@@ -79,14 +86,14 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
-
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.nav_explore:
-                        startActivity(new Intent(getApplicationContext(),ExploreActivity.class));
+                        finish();
+                        startActivity(new Intent(getApplicationContext(), ExploreActivity.class));
                         overridePendingTransition(0,0);
                         return true;
                     case R.id.nav_profile:
@@ -95,6 +102,14 @@ public class ProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    // Back To Exit
+    @Override
+    public void onBackPressed() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
+        bottomNavigationView.setSelectedItemId(R.id.nav_explore);
+        finish();
     }
 
 //    @Override

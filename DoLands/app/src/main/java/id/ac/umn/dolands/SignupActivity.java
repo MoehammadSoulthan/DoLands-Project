@@ -20,12 +20,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignupActivity extends AppCompatActivity {
-    Button btnSignup;
-    TextView tvToLogin;
-    EditText etName, etUsername, etEmail, etPassword, etRepassword;
-    ProgressBar progressBar;
+    private Button btnSignup;
+    private TextView tvToLogin;
+    private EditText etName, etUsername, etEmail, etPassword, etRepassword;
+    private ProgressBar progressBar;
 
-    FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +128,6 @@ public class SignupActivity extends AppCompatActivity {
             return;
         }
 
-        btnSignup.setVisibility(View.GONE);
-        tvToLogin.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -144,8 +142,6 @@ public class SignupActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if(task.isSuccessful()) {
                                         Toast.makeText(SignupActivity.this, "User Has Been Registered Sucessfully!", Toast.LENGTH_LONG).show();
-                                        btnSignup.setVisibility(View.VISIBLE);
-                                        tvToLogin.setVisibility(View.VISIBLE);
                                         progressBar.setVisibility(View.GONE);
 
                                         // Redirect to Login Layout!
@@ -153,8 +149,6 @@ public class SignupActivity extends AppCompatActivity {
                                         finish();
                                     } else {
                                         Toast.makeText(SignupActivity.this, "Failed to Register! Try Again!", Toast.LENGTH_LONG).show();
-                                        btnSignup.setVisibility(View.VISIBLE);
-                                        tvToLogin.setVisibility(View.VISIBLE);
                                         progressBar.setVisibility(View.GONE);
                                     }
                                 }
@@ -162,8 +156,6 @@ public class SignupActivity extends AppCompatActivity {
 
                         } else {
                             Toast.makeText(SignupActivity.this, "Failed to Register! Try Again!", Toast.LENGTH_LONG).show();
-                            btnSignup.setVisibility(View.VISIBLE);
-                            tvToLogin.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         }
                     }
