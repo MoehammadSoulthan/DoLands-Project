@@ -34,10 +34,10 @@
     <string name="password">Password</string>
     <string name="click_to_signup">Click Here to Sign Up</string>
     <string name="login">Login</string>
-    <string name="click_to_login">Click Here to Login</string>
+    <string name="click_to_login">Back to Login</string>
     <string name="signup">Sign Up</string>
     <string name="upload_pp">Upload Profile Photo</string>
-    <string name="email">E-Mail</string>
+    <string name="email">Email Address</string>
     <string name="name">Name</string>
     <string name="repassword">Re-type Password</string>
     <string name="dob">Date of Birth</string>

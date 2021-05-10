@@ -34,7 +34,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:padding="6dp"
-            android:background="@drawable/round_search"
+            android:background="@drawable/edit_text"
             android:layout_marginBottom="10dp">
 
             <EditText
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:padding="6dp"
-            android:background="@drawable/round_search"
+            android:background="@drawable/edit_text"
             android:layout_marginBottom="10dp">
 
             <EditText
@@ -73,7 +73,8 @@
                 android:textColor="@color/black"
                 android:fontFamily="@font/quicksand"
                 android:textSize="16sp"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical"
+                android:autofillHints="" />
         </LinearLayout>
 
         <LinearLayout
@@ -92,7 +93,7 @@
                 android:textColor="@color/brown"
                 android:fontFamily="@font/montserrat"
                 android:textStyle="bold"
-                android:textSize="13sp"
+                android:textSize="16sp"
                 android:textAllCaps="false"
                 android:background="@drawable/round_button"
                 android:foreground="?android:attr/selectableItemBackground"/>
@@ -107,7 +108,7 @@
             android:text="@string/click_to_signup"
             android:textColor="@color/gray_dark"
             android:fontFamily="@font/questrial"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:layout_marginTop="15dp"/>
     </LinearLayout>
 
@@ -116,7 +117,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.7"
         android:gravity="end|bottom"
-        android:padding="15dp">
+        android:padding="14dp">
         <Button
             android:id="@+id/button_skip_login"
             android:layout_width="wrap_content"
