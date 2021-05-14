@@ -4,10 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.ColorStateListDrawable;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnLogin, btnSkipLogin;
     private TextView tvToSignup;
     private EditText etEmail, etPassword;
+    private CheckBox passShow;
 
     private FirebaseAuth mAuth;
     private FirebaseUser isLogin;
@@ -50,6 +59,20 @@ public class MainActivity extends AppCompatActivity {
         etEmail = findViewById(R.id.login_email);
         etPassword = findViewById(R.id.login_password);
         progressBar = findViewById(R.id.progressBar);
+        passShow = findViewById(R.id.passShow);
+
+        passShow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.yellow));
+                } else {
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.gray_dark));
+                }
+            }
+        });
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

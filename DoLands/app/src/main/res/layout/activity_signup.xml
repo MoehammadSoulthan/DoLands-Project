@@ -60,7 +60,7 @@
             android:textColorHint="@color/gray_dark"
             android:textColor="@color/black"
             android:fontFamily="@font/quicksand"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
     </LinearLayout>
 
@@ -86,7 +86,7 @@
             android:textColorHint="@color/gray_dark"
             android:textColor="@color/black"
             android:fontFamily="@font/quicksand"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
     </LinearLayout>
 
@@ -154,7 +154,7 @@
 
         <EditText
             android:id="@+id/input_password"
-            android:layout_width="match_parent"
+            android:layout_width="275dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -164,8 +164,15 @@
             android:textColorHint="@color/gray_dark"
             android:textColor="@color/black"
             android:fontFamily="@font/quicksand"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
+
+        <CheckBox
+            android:id="@+id/passShow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_attraction"
+            android:buttonTint="@color/gray_dark"/>
     </LinearLayout>
 
     <View
@@ -180,7 +187,7 @@
 
         <EditText
             android:id="@+id/input_repassword"
-            android:layout_width="match_parent"
+            android:layout_width="275dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
@@ -190,8 +197,15 @@
             android:textColorHint="@color/gray_dark"
             android:textColor="@color/black"
             android:fontFamily="@font/quicksand"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:gravity="center_vertical"/>
+
+        <CheckBox
+            android:id="@+id/passShow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/ic_attraction"
+            android:buttonTint="@color/gray_dark"/>
     </LinearLayout>
 
     <View

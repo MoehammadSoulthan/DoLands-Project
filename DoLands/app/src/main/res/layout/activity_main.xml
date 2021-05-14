@@ -62,7 +62,7 @@
 
             <EditText
                 android:id="@+id/login_password"
-                android:layout_width="match_parent"
+                android:layout_width="275dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
@@ -75,6 +75,13 @@
                 android:textSize="16sp"
                 android:gravity="center_vertical"
                 android:autofillHints="" />
+
+            <CheckBox
+                android:id="@+id/passShow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@drawable/ic_attraction"
+                android:buttonTint="@color/gray_dark"/>
         </LinearLayout>
 
         <LinearLayout

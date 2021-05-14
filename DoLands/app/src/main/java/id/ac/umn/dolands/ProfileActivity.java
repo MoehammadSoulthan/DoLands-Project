@@ -20,11 +20,22 @@ package id.ac.umn.dolands;
 
         import com.google.android.material.bottomnavigation.BottomNavigationView;
         import com.google.firebase.auth.FirebaseAuth;
+        import com.google.firebase.auth.FirebaseUser;
+        import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
+        import com.google.firebase.database.DatabaseReference;
+        import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
     Button btnEditProfile;
     ImageButton imgBtnExit;
-    TextView tvSaved;
+    TextView tvSaved, tvUsername, tvFullName, tvEmail;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser isLogin;
+    private DatabaseReference reference;
+    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +45,37 @@ public class ProfileActivity extends AppCompatActivity {
         imgBtnExit = findViewById(R.id.imgbutton_exit);
         btnEditProfile = findViewById(R.id.button_editprofile);
         tvSaved = findViewById(R.id.text_saved);
+        tvUsername = findViewById(R.id.text_user_username);
+        tvFullName = findViewById(R.id.text_user_fullname);
+        tvEmail = findViewById(R.id.text_user_email);
+
+        // Show User Information
+        isLogin = FirebaseAuth.getInstance().getCurrentUser();
+        if(isLogin != null) {
+            reference = FirebaseDatabase.getInstance().getReference("Users");
+            userID = isLogin.getUid();
+            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User userProfile = snapshot.getValue(User.class);
+
+                    if(userProfile != null) {
+                        String username = userProfile.username;
+                        String fullname = userProfile.name;
+                        String email = userProfile.email;
+
+                        tvUsername.setText(username);
+                        tvFullName.setText(fullname);
+                        tvEmail.setText(email);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(ProfileActivity.this, "Something Wrong Happened!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
 
         tvSaved.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-                alert.setMessage("Are You Sure to Logout?");
+                alert.setMessage("Are you sure want to Logout?");
                 alert.setCancelable(true);
 
                 alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
@@ -102,6 +144,8 @@ public class ProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+
     }
 
     // Back To Exit

@@ -5,9 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ public class SignupActivity extends AppCompatActivity {
     private TextView tvToLogin;
     private EditText etName, etUsername, etEmail, etPassword, etRepassword;
     private ProgressBar progressBar;
+    private CheckBox passShow1, passShow2;
 
     private FirebaseAuth mAuth;
 
@@ -64,6 +69,34 @@ public class SignupActivity extends AppCompatActivity {
         etRepassword = findViewById(R.id.input_repassword);
 
         progressBar = findViewById(R.id.progressBar);
+
+        passShow1 = findViewById(R.id.passShow1);
+        passShow1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.yellow));
+                } else {
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.gray_dark));
+                }
+            }
+        });
+
+        passShow2 = findViewById(R.id.passShow2);
+        passShow2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked) {
+                    etRepassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.yellow));
+                } else {
+                    etRepassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    buttonView.setButtonTintList(getColorStateList(R.color.gray_dark));
+                }
+            }
+        });
 
     }
 

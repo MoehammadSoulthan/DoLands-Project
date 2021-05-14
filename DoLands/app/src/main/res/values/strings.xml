@@ -42,4 +42,6 @@
     <string name="repassword">Re-type Password</string>
     <string name="dob">Date of Birth</string>
     <string name="emailOrUname">Email Address</string>
+    <string name="logout_button">Logout Button</string>
+    <string name="profile_picture">Profile Picture</string>
 </resources>
