@@ -27,6 +27,8 @@ package id.ac.umn.dolands;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ValueEventListener;
 
+        import java.util.HashMap;
+
 public class ProfileActivity extends AppCompatActivity {
     Button btnEditProfile;
     ImageButton imgBtnExit;
@@ -36,6 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseUser isLogin;
     private DatabaseReference reference;
     private String userID;
+    private SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,40 +52,44 @@ public class ProfileActivity extends AppCompatActivity {
         tvFullName = findViewById(R.id.text_user_fullname);
         tvEmail = findViewById(R.id.text_user_email);
 
+
         // Show User Information
-        isLogin = FirebaseAuth.getInstance().getCurrentUser();
-        if(isLogin != null) {
-            reference = FirebaseDatabase.getInstance().getReference("Users");
-            userID = isLogin.getUid();
-            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User userProfile = snapshot.getValue(User.class);
-
-                    if(userProfile != null) {
-                        String username = userProfile.username;
-                        String fullname = userProfile.name;
-                        String email = userProfile.email;
-
-                        tvUsername.setText(username);
-                        tvFullName.setText(fullname);
-                        tvEmail.setText(email);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Toast.makeText(ProfileActivity.this, "Something Wrong Happened!", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
+        sessionManager = new SessionManager(ProfileActivity.this);
+        showAllUserData();
+//        isLogin = FirebaseAuth.getInstance().getCurrentUser();
+//        if(isLogin != null) {
+//            reference = FirebaseDatabase.getInstance().getReference("Users");
+//            userID = isLogin.getUid();
+//            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    User userProfile = snapshot.getValue(User.class);
+//
+//                    if(userProfile != null) {
+//                        String username = userProfile.username;
+//                        String fullname = userProfile.name;
+//                        String email = userProfile.email;
+//
+//                        tvUsername.setText(username);
+//                        tvFullName.setText(fullname);
+//                        tvEmail.setText(email);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                    Toast.makeText(ProfileActivity.this, "Something Wrong Happened!", Toast.LENGTH_LONG).show();
+//                }
+//            });
+//        }
 
         tvSaved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, ProfileSavedActivity.class);
                 startActivity(intent);
-                finish();
+                overridePendingTransition(0,0);
+//                finish();
             }
         });
 
@@ -91,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
-                finish();
+//                finish();
             }
         });
 
@@ -109,6 +116,7 @@ public class ProfileActivity extends AppCompatActivity {
 //                        System.exit(0);
 
                         FirebaseAuth.getInstance().signOut();
+                        sessionManager.logout();
                         BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
                         bottomNavigationView.setSelectedItemId(R.id.nav_explore);
                         finishAffinity();
@@ -146,6 +154,23 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void showAllUserData() {
+//        Intent intent = getIntent();
+//        String username = intent.getStringExtra("username");
+//        String fullname = intent.getStringExtra("fullname");
+//        String email = intent.getStringExtra("email");
+
+        HashMap<String, String> userDetails = sessionManager.getUsersDetailFromSession();
+
+        String username = userDetails.get(SessionManager.KEY_USERNAME);
+        String fullname = userDetails.get(SessionManager.KEY_FULLNAME);
+        String email = userDetails.get(SessionManager.KEY_EMAIL);
+
+        tvUsername.setText(username);
+        tvFullName.setText(fullname);
+        tvEmail.setText(email);
     }
 
     // Back To Exit

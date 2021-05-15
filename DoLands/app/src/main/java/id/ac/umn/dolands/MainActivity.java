@@ -88,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         tvToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                etEmail.setText("");
+                etPassword.setText("");
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class);
                 startActivity(intent);
 //                finish();
@@ -175,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     if(user.isEmailVerified()) {
                         // Redirect to User Profile
                         finish();
+                        Toast.makeText(MainActivity.this, "Successfully Logged In ", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(MainActivity.this, ExploreActivity.class));
                     } else {
                         user.sendEmailVerification();

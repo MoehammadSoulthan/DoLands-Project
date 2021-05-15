@@ -147,8 +147,40 @@ public class ExploreActivity extends AppCompatActivity {
                             popup.show();
                             return true;
                         } else {
-                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                            overridePendingTransition(0,0);
+                            reference = FirebaseDatabase.getInstance().getReference("Users");
+                            userID = user.getUid();
+                            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User userProfile = snapshot.getValue(User.class);
+
+                                    if(userProfile != null) {
+                                        String username = userProfile.username;
+                                        String fullname = userProfile.name;
+                                        String email = userProfile.email;
+
+//                                        Intent intentReview = new Intent(getApplicationContext(), ProfileActivity.class);
+//                                        intentReview.putExtra("username", username);
+//                                        intentReview.putExtra("fullname", fullname);
+//                                        intentReview.putExtra("email", email);
+//                                        startActivity(intentReview);
+
+                                        SessionManager sessionManager = new SessionManager(ExploreActivity.this);
+                                        sessionManager.createLoginSession(username, fullname, email);
+
+                                        startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                                        overridePendingTransition(0,0);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Toast.makeText(ExploreActivity.this, "Something Wrong Happened!", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+//                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+//                            overridePendingTransition(0,0);
                         }
                     case R.id.nav_explore:
                         return true;

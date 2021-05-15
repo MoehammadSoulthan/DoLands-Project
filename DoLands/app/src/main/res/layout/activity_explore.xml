@@ -242,5 +242,5 @@
         app:itemTextColor="@drawable/nav_bottom_color"
         app:itemIconTint="@drawable/nav_bottom_color"
         app:menu="@menu/bottom_navigation"/>
-
+    
 </LinearLayout>
