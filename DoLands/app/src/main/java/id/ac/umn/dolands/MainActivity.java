@@ -1,14 +1,22 @@
 package id.ac.umn.dolands;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.ColorStateListDrawable;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -52,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         mAuth = FirebaseAuth.getInstance();
 
         // For Testing Mode
@@ -83,7 +93,11 @@ public class MainActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userLogin();
+                if(!isConnected(MainActivity.this)) {
+                    showCustomDialog();
+                } else {
+                    userLogin();
+                }
 
 //                Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
 //                startActivity(intent);
@@ -94,20 +108,29 @@ public class MainActivity extends AppCompatActivity {
         tvToSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etEmail.setText("");
-                etPassword.setText("");
-                Intent intent = new Intent(MainActivity.this, SignupActivity.class);
-                startActivity(intent);
+                if(!isConnected(MainActivity.this)) {
+                    showCustomDialog();
+                } else {
+                    etEmail.setText("");
+                    etPassword.setText("");
+                    Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                    startActivity(intent);
 //                finish();
+                }
             }
         });
 
         btnSkipLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
-                startActivity(intent);
-                finish();
+                if(!isConnected(MainActivity.this)) {
+                    showCustomDialog();
+                }
+                else {
+                    Intent intent = new Intent(MainActivity.this, ExploreActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
 
@@ -144,6 +167,42 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
         }
 
+    }
+
+    // Check Internet Connection
+    private boolean isConnected(MainActivity mainActivity) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) mainActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo wifiConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        NetworkInfo mobileConn = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+        if( (wifiConn != null && wifiConn.isConnected()) || (mobileConn != null && mobileConn.isConnected()) ) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    private void showCustomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage("Please Connect to the Internet to Proceed Further")
+                .setCancelable(false)
+                .setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                        finish();
+                    }
+                }).show();
     }
 
     private void userLogin() {
