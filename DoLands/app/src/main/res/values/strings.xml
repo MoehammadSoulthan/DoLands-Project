@@ -5,7 +5,7 @@
     <string name="save">save</string>
     <string name="edit_name">Edit name...</string>
     <string name="edit_bio">Edit bio...</string>
-    <string name="searching">Type Location</string>
+    <string name="searching">Location Search</string>
     <string name="nearby">Nearby Attractions</string>
     <string name="attract_name">Disneyland</string>
     <string name="btn_detail">Detail</string>

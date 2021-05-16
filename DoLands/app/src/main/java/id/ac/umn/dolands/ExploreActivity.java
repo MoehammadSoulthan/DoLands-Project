@@ -7,14 +7,20 @@ import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,6 +47,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 public class ExploreActivity extends AppCompatActivity {
     SupportMapFragment supportMapFragment;
@@ -103,11 +115,12 @@ public class ExploreActivity extends AppCompatActivity {
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
         client = LocationServices.getFusedLocationProviderClient(this);
 
-        if (ActivityCompat.checkSelfPermission(ExploreActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if (ActivityCompat.checkSelfPermission(ExploreActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            statusCheck();
             getCurrentLocation();
-        }else {
-            ActivityCompat.requestPermissions(ExploreActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+        }
+        else {
+            ActivityCompat.requestPermissions(ExploreActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 44);
         }
 
         // Menu Bottom
@@ -185,12 +198,45 @@ public class ExploreActivity extends AppCompatActivity {
 //                            overridePendingTransition(0,0);
                         }
                     case R.id.nav_explore:
+                        getCurrentLocation();
                         return true;
                 }
                 return false;
             }
         });
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getCurrentLocation();
+    }
+
+    public void statusCheck() {
+        final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be Disabled, Do you want to Enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     // Back To Exit
@@ -218,8 +264,8 @@ public class ExploreActivity extends AppCompatActivity {
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
-                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are here");
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are Here!");
 
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
                             googleMap.addMarker(options);
@@ -235,6 +281,7 @@ public class ExploreActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44){
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                statusCheck();
                 getCurrentLocation();
             }
         }
