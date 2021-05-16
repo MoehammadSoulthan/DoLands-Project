@@ -15,15 +15,20 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -37,7 +42,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EditProfileActivity extends AppCompatActivity {
     private Button btnSaveEdit, btnChangeProfilePic;
-    private EditText etUsername;
+    private TextView tvEmail;
+    private EditText etUsername, etFullname;
     private CircleImageView circleImageView;
     private Uri mImageUri, downloadUri = null;
 
@@ -45,6 +51,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseFirestore firestore;
     private String Uid;
+    private SessionManager sessionManager;
+    private DatabaseReference reference;
+    private String username, fullname, email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +69,18 @@ public class EditProfileActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         storageReference = FirebaseStorage.getInstance().getReference();
         firestore = FirebaseFirestore.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
 
         etUsername = findViewById(R.id.edit_username);
+        etFullname = findViewById(R.id.edit_fullname);
+        tvEmail = findViewById(R.id.text_user_email);
         circleImageView = findViewById(R.id.circleImageView);
         btnChangeProfilePic = findViewById(R.id.button_change_profilephoto);
         btnSaveEdit = findViewById(R.id.button_saveEdit);
+
+        // Get User Data
+        sessionManager = new SessionManager(EditProfileActivity.this);
+        getUserData();
 
         btnChangeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,13 +103,25 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateUserInfo();
-
-//                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
-//                startActivity(intent);
-//                finish();
+                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
+    }
+
+
+    private void getUserData() {
+        HashMap<String, String> userDetails = sessionManager.getUsersDetailFromSession();
+
+        username = userDetails.get(SessionManager.KEY_USERNAME);
+        fullname = userDetails.get(SessionManager.KEY_FULLNAME);
+        email = userDetails.get(SessionManager.KEY_EMAIL);
+
+        etUsername.setText(username);
+        etFullname.setText(fullname);
+        tvEmail.setText(email);
     }
 
     @Override
@@ -113,26 +141,64 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUserInfo() {
-        String username = etUsername.getText().toString().trim();
-        if(mImageUri != null) {
-            btnChangeProfilePic.setError("Please Upload Picture!");
-            StorageReference imageRef = storageReference.child("Profile_Pics").child(Uid + ".jpg");
+    public void updateUserInfo() {
+//        String username = etUsername.getText().toString().trim();
+//        if(mImageUri != null) {
+//            btnChangeProfilePic.setError("Please Upload Picture!");
+//            StorageReference imageRef = storageReference.child("Profile_Pics").child(Uid + ".jpg");
+//
+//            imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                    if(task.isSuccessful()) {
+//                        saveToFireStore(task, username, imageRef);
+//                    }
+//                    else {
+//                        Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
+//        }
 
-            imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()) {
-                        saveToFireStore(task, username, imageRef);
-                    }
-                    else {
-                        Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+        if(checkValidation()) {
+            sessionManager.logout();
+            sessionManager = new SessionManager(EditProfileActivity.this);
+            sessionManager.createLoginSession(username, fullname, email);
+            Toast.makeText(this, "Data Has Been Updated!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Data Is Same Cannot Be Updated!", Toast.LENGTH_LONG).show();
         }
     }
 
+    private boolean checkValidation() {
+        if(!username.equals(etUsername.getText().toString()) || !fullname.equals(etFullname.getText().toString())) {
+            if(username.isEmpty()) {
+                etUsername.setError("Username is Required!");
+                etUsername.requestFocus();
+                return false;
+            }
+            else {
+                username = etUsername.getText().toString();
+                reference.child(mAuth.getCurrentUser().getUid()).child("name").setValue(username);
+            }
+
+            if(fullname.isEmpty()) {
+                etFullname.setError("Fullname is Required!");
+                etFullname.requestFocus();
+                return false;
+            }
+            else {
+                fullname = etFullname.getText().toString();
+                reference.child(mAuth.getCurrentUser().getUid()).child("name").setValue(fullname);
+            }
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
     private void saveToFireStore(Task<UploadTask.TaskSnapshot> task, String username, StorageReference imageRef) {
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -152,6 +218,24 @@ public class EditProfileActivity extends AppCompatActivity {
 //                });
             }
         });
+    }
+
+    // Back Button On Toolbar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Back To Exit
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

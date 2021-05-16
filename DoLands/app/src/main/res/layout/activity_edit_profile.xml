@@ -25,9 +25,9 @@
             <TextView
                 android:id="@+id/text_user_email"
                 android:layout_width="wrap_content"
-                android:layout_height="90dp"
+                android:layout_height="70dp"
                 android:text="@string/email"
-                android:textSize="23sp"
+                android:textSize="15sp"
                 android:textColor="@color/brown"
                 android:fontFamily="@font/questrial"
                 android:textStyle="bold"

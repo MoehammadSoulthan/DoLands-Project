@@ -98,7 +98,7 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
-//                finish();
+                finish();
             }
         });
 
@@ -152,7 +152,6 @@ public class ProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
     }
 
