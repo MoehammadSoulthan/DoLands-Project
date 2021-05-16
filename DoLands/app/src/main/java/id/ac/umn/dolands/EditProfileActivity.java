@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -29,8 +31,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -70,6 +74,24 @@ public class EditProfileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         firestore = FirebaseFirestore.getInstance();
         reference = FirebaseDatabase.getInstance().getReference("Users");
+        sessionManager = new SessionManager(EditProfileActivity.this);
+
+        Uid = mAuth.getCurrentUser().getUid();
+
+        // Display Profile Image
+        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String username_img = task.getResult().getString("username");
+                    String imageUrl = task.getResult().getString("image");
+//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
+                    if(imageUrl != null) {
+                        Glide.with(EditProfileActivity.this).load(imageUrl).into(circleImageView);
+                    }
+                }
+            }
+        });
 
         etUsername = findViewById(R.id.edit_username);
         etFullname = findViewById(R.id.edit_fullname);
@@ -111,7 +133,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-
     private void getUserData() {
         HashMap<String, String> userDetails = sessionManager.getUsersDetailFromSession();
 
@@ -134,6 +155,34 @@ public class EditProfileActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
                 circleImageView.setImageURI(mImageUri);
+
+                if(mImageUri != null) {
+                    final ProgressDialog progressDialog = new ProgressDialog(this);
+                    progressDialog.setTitle("Uploading Image...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.show();
+
+                    StorageReference imageRef = storageReference.child("Profile_Pics").child(Uid + ".jpg");
+
+                    imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                progressDialog.dismiss();
+                                saveToFireStore(task, username, imageRef);
+                            } else {
+                                Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            double progressPercent = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                            progressDialog.setMessage("Progress: " + (int) progressPercent + "%");
+                        }
+                    });
+                }
+
             }
             else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Toast.makeText(this, result.getError().getMessage(), Toast.LENGTH_SHORT).show();
@@ -142,27 +191,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void updateUserInfo() {
-//        String username = etUsername.getText().toString().trim();
-//        if(mImageUri != null) {
-//            btnChangeProfilePic.setError("Please Upload Picture!");
-//            StorageReference imageRef = storageReference.child("Profile_Pics").child(Uid + ".jpg");
-//
-//            imageRef.putFile(mImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                    if(task.isSuccessful()) {
-//                        saveToFireStore(task, username, imageRef);
-//                    }
-//                    else {
-//                        Toast.makeText(EditProfileActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//        }
-
         if(checkValidation()) {
             sessionManager.logout();
-            sessionManager = new SessionManager(EditProfileActivity.this);
             sessionManager.createLoginSession(username, fullname, email);
             Toast.makeText(this, "Data Has Been Updated!", Toast.LENGTH_LONG).show();
         }
@@ -180,7 +210,10 @@ public class EditProfileActivity extends AppCompatActivity {
             }
             else {
                 username = etUsername.getText().toString();
-                reference.child(mAuth.getCurrentUser().getUid()).child("name").setValue(username);
+                reference.child(mAuth.getCurrentUser().getUid()).child("username").setValue(username);
+
+                StorageReference imageRef = storageReference.child("Profile_Pics").child(Uid + ".jpg");
+                updateUsernameInPicture(username, imageRef);
             }
 
             if(fullname.isEmpty()) {
@@ -199,6 +232,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return false;
         }
     }
+
     private void saveToFireStore(Task<UploadTask.TaskSnapshot> task, String username, StorageReference imageRef) {
         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -208,14 +242,27 @@ public class EditProfileActivity extends AppCompatActivity {
                 map.put("username", username);
                 map.put("image", downloadUri.toString());
 
-//                firestore.collection("Users").document(Uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if(task.isSuccessful()) {
-//                            Toast.makeText(SignupActivity.this, "Profile Setting Saved", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
+                firestore.collection("Users").document(Uid).set(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            Toast.makeText(EditProfileActivity.this, "Profile Picture Saved!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    private void updateUsernameInPicture(String username, StorageReference imageRef) {
+        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                downloadUri = uri;
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("username", username);
+                map.put("image", downloadUri.toString());
+                firestore.collection("Users").document(Uid).set(map);
             }
         });
     }

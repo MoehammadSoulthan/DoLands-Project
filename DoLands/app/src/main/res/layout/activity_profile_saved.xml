@@ -36,12 +36,12 @@
             android:paddingStart="10dp">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/user_profilephoto"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 app:cardCornerRadius="60dp">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/profilephoto"

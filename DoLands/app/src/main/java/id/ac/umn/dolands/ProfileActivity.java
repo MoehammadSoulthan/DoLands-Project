@@ -10,6 +10,7 @@ package id.ac.umn.dolands;
         import android.graphics.Color;
         import android.graphics.drawable.ColorDrawable;
         import android.os.Bundle;
+        import android.util.Log;
         import android.view.Menu;
         import android.view.MenuItem;
         import android.view.View;
@@ -18,6 +19,9 @@ package id.ac.umn.dolands;
         import android.widget.TextView;
         import android.widget.Toast;
 
+        import com.bumptech.glide.Glide;
+        import com.google.android.gms.tasks.OnCompleteListener;
+        import com.google.android.gms.tasks.Task;
         import com.google.android.material.bottomnavigation.BottomNavigationView;
         import com.google.firebase.auth.FirebaseAuth;
         import com.google.firebase.auth.FirebaseUser;
@@ -26,19 +30,26 @@ package id.ac.umn.dolands;
         import com.google.firebase.database.DatabaseReference;
         import com.google.firebase.database.FirebaseDatabase;
         import com.google.firebase.database.ValueEventListener;
+        import com.google.firebase.firestore.DocumentSnapshot;
+        import com.google.firebase.firestore.FirebaseFirestore;
 
         import java.util.HashMap;
 
+        import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProfileActivity extends AppCompatActivity {
-    Button btnEditProfile;
-    ImageButton imgBtnExit;
-    TextView tvSaved, tvUsername, tvFullName, tvEmail;
+    private Button btnEditProfile;
+    private ImageButton imgBtnExit;
+    private TextView tvSaved, tvUsername, tvFullName, tvEmail;
+    private CircleImageView circleImageView;
 
     private FirebaseAuth mAuth;
     private FirebaseUser isLogin;
     private DatabaseReference reference;
     private String userID;
     private SessionManager sessionManager;
+    private FirebaseFirestore firestore;
+    private String Uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +62,7 @@ public class ProfileActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.text_user_username);
         tvFullName = findViewById(R.id.text_user_fullname);
         tvEmail = findViewById(R.id.text_user_email);
-
+        circleImageView = findViewById(R.id.circleImageView);
 
         // Show User Information
         sessionManager = new SessionManager(ProfileActivity.this);
@@ -82,6 +93,26 @@ public class ProfileActivity extends AppCompatActivity {
 //                }
 //            });
 //        }
+
+        // Display Profile Image
+        mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        Uid = mAuth.getCurrentUser().getUid();
+
+        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String username_img = task.getResult().getString("username");
+                    String imageUrl = task.getResult().getString("image");
+//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
+                    if(imageUrl != null) {
+                        Glide.with(ProfileActivity.this).load(imageUrl).into(circleImageView);
+                    }
+                }
+            }
+        });
 
         tvSaved.setOnClickListener(new View.OnClickListener() {
             @Override

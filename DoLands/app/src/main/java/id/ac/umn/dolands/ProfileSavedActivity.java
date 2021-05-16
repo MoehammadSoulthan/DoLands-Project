@@ -14,18 +14,35 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
-public class ProfileSavedActivity extends AppCompatActivity {
-    Button btnEditProfile;
-    ImageButton imgBtnExit;
-    TextView tvMyReview, tvUsername, tvFullName, tvEmail;;
-    RelativeLayout rlSaved1;
+import de.hdodenhof.circleimageview.CircleImageView;
 
+public class ProfileSavedActivity extends AppCompatActivity {
+    private Button btnEditProfile;
+    private ImageButton imgBtnExit;
+    private TextView tvMyReview, tvUsername, tvFullName, tvEmail;;
+    private RelativeLayout rlSaved1;
+    private CircleImageView circleImageView;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser isLogin;
+    private DatabaseReference reference;
+    private String userID;
     private SessionManager sessionManager;
+    private FirebaseFirestore firestore;
+    private String Uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +53,7 @@ public class ProfileSavedActivity extends AppCompatActivity {
         btnEditProfile = findViewById(R.id.button_editprofile);
         tvMyReview = findViewById(R.id.text_my_review);
         rlSaved1 = findViewById(R.id.saved_attract1);
+        circleImageView = findViewById(R.id.circleImageView);
 
         tvUsername = findViewById(R.id.text_user_username);
         tvFullName = findViewById(R.id.text_user_fullname);
@@ -44,6 +62,26 @@ public class ProfileSavedActivity extends AppCompatActivity {
         // Show User Information
         sessionManager = new SessionManager(ProfileSavedActivity.this);
         showAllUserData();
+
+        // Display Profile Image
+        mAuth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference("Users");
+        Uid = mAuth.getCurrentUser().getUid();
+
+        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String username_img = task.getResult().getString("username");
+                    String imageUrl = task.getResult().getString("image");
+//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
+                    if(imageUrl != null) {
+                        Glide.with(ProfileSavedActivity.this).load(imageUrl).into(circleImageView);
+                    }
+                }
+            }
+        });
 
         rlSaved1.setOnClickListener(new View.OnClickListener() {
             @Override
