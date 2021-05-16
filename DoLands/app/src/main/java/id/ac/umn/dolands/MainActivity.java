@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorStateListDrawable;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+
+        // For Testing Mode
+//        FirebaseAuth.getInstance().signOut();
+//        finishAffinity();
 
         btnLogin = findViewById(R.id.button_login);
         tvToSignup = findViewById(R.id.text_click_to_signup);
@@ -107,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
         isLogin = FirebaseAuth.getInstance().getCurrentUser();
+//        Log.e("LOGIN", String.valueOf(isLogin));
 
         // Check if User Logged In
         if(isLogin != null) {
@@ -181,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, ExploreActivity.class));
                     } else {
                         user.sendEmailVerification();
+                        FirebaseAuth.getInstance().signOut();
                         etEmail.setText("");
                         etPassword.setText("");
                         progressBar.setVisibility(View.GONE);

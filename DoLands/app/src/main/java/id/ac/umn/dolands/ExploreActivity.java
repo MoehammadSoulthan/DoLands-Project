@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -96,6 +97,7 @@ public class ExploreActivity extends AppCompatActivity {
 
         // User Login
         user = FirebaseAuth.getInstance().getCurrentUser();
+//        Log.e("USER", String.valueOf(user));
 
         // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);

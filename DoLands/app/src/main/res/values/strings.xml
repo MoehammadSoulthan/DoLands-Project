@@ -44,4 +44,5 @@
     <string name="emailOrUname">Email Address</string>
     <string name="logout_button">Logout Button</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="update">Update</string>
 </resources>
