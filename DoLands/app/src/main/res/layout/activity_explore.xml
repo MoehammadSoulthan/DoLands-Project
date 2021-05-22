@@ -84,8 +84,10 @@
                     android:layout_height="wrap_content"
                     android:text="@string/nearby"
                     android:textColor="@color/brown"
+                    android:textStyle="bold"
                     android:textSize="18sp"
-                    android:fontFamily="@font/quicksand"/>
+                    android:fontFamily="@font/quicksand"
+                    android:layout_marginStart="5dp"/>
             </LinearLayout>
 
             <HorizontalScrollView

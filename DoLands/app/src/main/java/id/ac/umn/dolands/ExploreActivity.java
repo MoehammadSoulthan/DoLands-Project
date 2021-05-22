@@ -15,6 +15,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.media.Image;
@@ -53,12 +55,19 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.mancj.materialsearchbar.MaterialSearchBar;
 
-public class ExploreActivity extends AppCompatActivity {
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     ImageView ivAttract1, ivAttract2, ivAttract3, ivAttract4;
     private long backPressedTime;
+    MaterialSearchBar searchBar;
+    GoogleMap mGoogleMap;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -73,6 +82,38 @@ public class ExploreActivity extends AppCompatActivity {
         ivAttract2 = (ImageView) findViewById(R.id.attract2);
         ivAttract3 = (ImageView) findViewById(R.id.attract3);
         ivAttract4 = (ImageView) findViewById(R.id.attract4);
+
+        searchBar = findViewById(R.id.searchBar);
+        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+//                startSearch(text.toString(), true, null, true);
+                String locationName = text.toString();
+                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+                try {
+                    List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
+
+                    if(addressList.size() > 0) {
+                        Address address = addressList.get(0);
+                        gotoLocation(address.getLatitude(), address.getLongitude(), address.getLocality());
+
+                        Toast.makeText(getApplicationContext(), address.getLocality(), Toast.LENGTH_SHORT).show();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+            }
+        });
 
         // Intent to Detail
         ivAttract1.setOnClickListener(new View.OnClickListener() {
@@ -113,6 +154,7 @@ public class ExploreActivity extends AppCompatActivity {
 
         // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
+        supportMapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(ExploreActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -223,35 +265,30 @@ public class ExploreActivity extends AppCompatActivity {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be Disabled, Do you want to Enable it?")
+        builder.setMessage("This App needs the Location Permission, Please accept to use Location Functionality!")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(final DialogInterface dialog, final int id) {
                         startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, final int id) {
-                        dialog.cancel();
-                    }
                 });
+//                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                    public void onClick(final DialogInterface dialog, final int id) {
+//                        dialog.cancel();
+//                    }
+//                });
         final AlertDialog alert = builder.create();
         alert.show();
     }
 
-    // Back To Exit
-    @Override
-    public void onBackPressed() {
-        if(backPressedTime + 2000 > System.currentTimeMillis()) {
-            finishAffinity();
-            super.onBackPressed();
-            System.exit(0);
-            return;
-        } else {
-            Toast.makeText(getBaseContext(), "Back Again To Exit", Toast.LENGTH_SHORT).show();
-        }
+    // Goto Location Based On User Input
+    private void gotoLocation(double latitude, double longitude, String addressLocality) {
+        mGoogleMap.clear();
+        LatLng LatLng = new LatLng(latitude, longitude);
+        MarkerOptions options = new MarkerOptions().position(LatLng).title(addressLocality);
 
-        backPressedTime = System.currentTimeMillis();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng, 14));
+        mGoogleMap.addMarker(options);
     }
 
     // Maps
@@ -285,5 +322,27 @@ public class ExploreActivity extends AppCompatActivity {
                 getCurrentLocation();
             }
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        mGoogleMap.setMyLocationEnabled(true);
+    }
+
+    // Back To Exit
+    @Override
+    public void onBackPressed() {
+        if(backPressedTime + 2000 > System.currentTimeMillis()) {
+            finishAffinity();
+            super.onBackPressed();
+            System.exit(0);
+            return;
+        } else {
+            Toast.makeText(getBaseContext(), "Back Again To Exit", Toast.LENGTH_SHORT).show();
+        }
+
+        backPressedTime = System.currentTimeMillis();
     }
 }
