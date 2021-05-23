@@ -21,6 +21,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -59,11 +60,20 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ExploreActivity extends AppCompatActivity {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     ImageView ivAttract1, ivAttract2, ivAttract3, ivAttract4;
@@ -98,16 +108,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 String locationName = text.toString();
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
+
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
 
-                    if(addressList.size() > 0) {
+                    if (addressList.size() > 0) {
                         Address address = addressList.get(0);
                         gotoLocation(address.getLatitude(), address.getLongitude(), address.getLocality());
 
                         Toast.makeText(getApplicationContext(), address.getLocality(), Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), "Not Found", Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
@@ -159,15 +169,13 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
-        supportMapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(ExploreActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             statusCheck();
             getCurrentLocation();
-        }
-        else {
-            ActivityCompat.requestPermissions(ExploreActivity.this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, 44);
+        } else {
+            ActivityCompat.requestPermissions(ExploreActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
 
         // Menu Bottom
@@ -177,9 +185,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.nav_profile:
-                        if(user == null) {
+                        if (user == null) {
                             // Popup Alert Login
                             Dialog popup = new Dialog(ExploreActivity.this);
                             popup.setContentView(R.layout.popup_login);
@@ -192,7 +200,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
                             btn_ok.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void  onClick(View v) {
+                                public void onClick(View v) {
                                     popup.dismiss();
                                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                     finishAffinity();
@@ -201,7 +209,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
                             tv_skip.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void  onClick(View v) {
+                                public void onClick(View v) {
                                     bottomNavigationView.setSelectedItemId(R.id.nav_explore);
                                     popup.dismiss();
                                 }
@@ -216,7 +224,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     User userProfile = snapshot.getValue(User.class);
 
-                                    if(userProfile != null) {
+                                    if (userProfile != null) {
                                         String username = userProfile.username;
                                         String fullname = userProfile.name;
                                         String email = userProfile.email;
@@ -231,7 +239,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                                         sessionManager.createLoginSession(username, fullname, email);
 
                                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-                                        overridePendingTransition(0,0);
+                                        overridePendingTransition(0, 0);
                                     }
                                 }
 
@@ -300,8 +308,20 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 .center(LatLng)
                 .radius(10000.0)
                 .strokeColor(Color.YELLOW)
-                .fillColor(Color.argb(30,255,255,0));
+                .fillColor(Color.argb(30, 255, 255, 0));
         mGoogleMap.addCircle(circleOptions);
+
+//        Log.e("LatLng", latitude + " + " + longitude);
+
+        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + // Url
+                "?location=" + latitude + "," + longitude + // Location Latitude and Longitude
+                "&radius=10000" + // Nearby Radius
+                "&types=tourist_attraction" + // Place Type
+                "&sensor=true" + // Sensor
+                "&key=" + getResources().getString(R.string.API_1); // Google Map API Key
+
+        // Execute place task method to download json data
+//        new PlaceTask().execute(url);
     }
 
     // Maps
@@ -310,14 +330,21 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location != null){
+                if (location != null) {
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @SuppressLint("MissingPermission")
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
 //                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 //                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are Here!");
 //                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 //                            googleMap.addMarker(options);
+
+                            mGoogleMap = googleMap;
+                            mGoogleMap.setMyLocationEnabled(true);
+                            mGoogleMap.setMapStyle(MapStyleOptions
+                                    .loadRawResourceStyle(getApplicationContext(), R.raw.style_json));
+                            mGoogleMap.setTrafficEnabled(true);
 
                             gotoLocation(location.getLatitude(), location.getLongitude(), "Current Location");
                         }
@@ -330,22 +357,12 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     // Maps
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 44){
-            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == 44) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 statusCheck();
                 getCurrentLocation();
             }
         }
-    }
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-        mGoogleMap.setMyLocationEnabled(true);
-        mGoogleMap.setMapStyle(MapStyleOptions
-                .loadRawResourceStyle(getApplicationContext(), R.raw.style_json));
-        mGoogleMap.setTrafficEnabled(true);
     }
 
     // Back To Exit
@@ -363,4 +380,102 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         backPressedTime = System.currentTimeMillis();
     }
 
+    private class PlaceTask extends AsyncTask<String, Integer, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            String data = null;
+            try {
+                // Initialize Data
+                data = downloadUrl(strings[0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            // Execute Parser Task
+            new ParserTask().execute(s);
+        }
+    }
+
+    private String downloadUrl(String string) throws IOException {
+        // Initialize Url
+        URL url = new URL(string);
+        // Initialize Connection
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        // Connect connection
+        connection.connect();
+        // Initialize Input Stream
+        InputStream stream = connection.getInputStream();
+        // Initialize Buffer Reader
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        // Initialize String Builder
+        StringBuilder builder = new StringBuilder();
+        // Initialize String Variable
+        String line = "";
+        // Use while loop
+        while((line = reader.readLine()) != null) {
+            // Append Line
+            builder.append(line);
+        }
+
+        // Get Append Data
+        String data = builder.toString();
+        // Close Reader
+        reader.close();
+        return data;
+    }
+
+    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
+
+        @Override
+        protected List<HashMap<String, String>> doInBackground(String... strings) {
+            // Create JSON Parser  Class
+            JsonParser jsonParser = new JsonParser();
+            // Initialize Hash Map List
+            List<HashMap<String, String>> mapList = null;
+            JSONObject object = null;
+            try {
+                // Initialize Json Object
+                object = new JSONObject(strings[0]);
+                // Parse Json Object
+                mapList = jsonParser.parseResult(object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            // Return Map List
+            return mapList;
+        }
+
+        @Override
+        protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
+            // Clear Map
+            mGoogleMap.clear();
+            // Use for loop
+            for(int i = 0; i < hashMaps.size(); i++) {
+                // Initialize Hash Map
+                HashMap<String, String> hashMapList = hashMaps.get(i);
+                // Get Latitude
+                double lat = Double.parseDouble(hashMapList.get("lat"));
+                // Get Longitude
+                double lng = Double.parseDouble(hashMapList.get("lng"));
+                // Get Name
+                String name = hashMapList.get("name");
+                // Concat Latitude & Longitude
+                LatLng latLng = new LatLng(lat, lng);
+                // Initialize Marker Options
+                MarkerOptions options = new MarkerOptions();
+                // Set Position
+                options.position(latLng);
+                // Set Title
+                options.title(name);
+                // Add Marker on Map
+                mGoogleMap.addMarker(options);
+
+            }
+        }
+    }
 }
