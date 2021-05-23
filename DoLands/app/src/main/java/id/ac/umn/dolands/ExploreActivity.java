@@ -73,7 +73,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class ExploreActivity extends AppCompatActivity {
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     ImageView ivAttract1, ivAttract2, ivAttract3, ivAttract4;
@@ -169,6 +169,7 @@ public class ExploreActivity extends AppCompatActivity {
 
         // Maps
         supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.current_map);
+        supportMapFragment.getMapAsync(this);
         client = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(ExploreActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -340,12 +341,7 @@ public class ExploreActivity extends AppCompatActivity {
 //                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 //                            googleMap.addMarker(options);
 
-                            mGoogleMap = googleMap;
-                            mGoogleMap.setMyLocationEnabled(true);
-                            mGoogleMap.setMapStyle(MapStyleOptions
-                                    .loadRawResourceStyle(getApplicationContext(), R.raw.style_json));
-                            mGoogleMap.setTrafficEnabled(true);
-
+                            googleMap.setMyLocationEnabled(true);
                             gotoLocation(location.getLatitude(), location.getLongitude(), "Current Location");
                         }
                     });
@@ -363,6 +359,20 @@ public class ExploreActivity extends AppCompatActivity {
                 getCurrentLocation();
             }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mGoogleMap = googleMap;
+        mGoogleMap.setMapStyle(MapStyleOptions
+                .loadRawResourceStyle(getApplicationContext(), R.raw.style_json));
+        mGoogleMap.setTrafficEnabled(true);
+
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(ExploreActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
+//            return;
+//        }
+//        mGoogleMap.setMyLocationEnabled(true);
     }
 
     // Back To Exit
