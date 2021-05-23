@@ -80,10 +80,10 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        ivAttract1 = (ImageView) findViewById(R.id.attract1);
-        ivAttract2 = (ImageView) findViewById(R.id.attract2);
-        ivAttract3 = (ImageView) findViewById(R.id.attract3);
-        ivAttract4 = (ImageView) findViewById(R.id.attract4);
+        ivAttract1 = findViewById(R.id.attract1);
+        ivAttract2 = findViewById(R.id.attract2);
+        ivAttract3 = findViewById(R.id.attract3);
+        ivAttract4 = findViewById(R.id.attract4);
 
         searchBar = findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
@@ -319,7 +319,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 //                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
 //                            googleMap.addMarker(options);
 
-                            gotoLocation(location.getLatitude(), location.getLongitude(), "You are Here!");
+                            gotoLocation(location.getLatitude(), location.getLongitude(), "Current Location");
                         }
                     });
                 }
@@ -362,4 +362,5 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
         backPressedTime = System.currentTimeMillis();
     }
+
 }

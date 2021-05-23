@@ -42,7 +42,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek"/>
+            android:value="@string/API_1"/>
 
         <activity
             android:name=".EditProfileActivity"

@@ -45,4 +45,6 @@
     <string name="logout_button">Logout Button</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="update">Update</string>
+    <string name="API_1">AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek</string>
+    <string name="API_2">AIzaSyD2mQdMJ0vv1Yl2MSqrWwCuEIKRqqGU5So</string>
 </resources>
