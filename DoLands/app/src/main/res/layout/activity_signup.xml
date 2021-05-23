@@ -135,8 +135,9 @@
 
         <EditText
             android:id="@+id/input_password"
-            android:layout_width="275dp"
-            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@android:color/transparent"
@@ -150,8 +151,9 @@
 
         <CheckBox
             android:id="@+id/passShow1"
-            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:button="@drawable/ic_attraction"
             android:buttonTint="@color/gray_dark"/>
     </LinearLayout>
@@ -168,8 +170,9 @@
 
         <EditText
             android:id="@+id/input_repassword"
-            android:layout_width="275dp"
-            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@android:color/transparent"
@@ -183,8 +186,9 @@
 
         <CheckBox
             android:id="@+id/passShow2"
-            android:layout_width="wrap_content"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content"
+            android:layout_width="0dp"
             android:button="@drawable/ic_attraction"
             android:buttonTint="@color/gray_dark"/>
     </LinearLayout>
