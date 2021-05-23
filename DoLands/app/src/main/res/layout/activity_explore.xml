@@ -48,7 +48,8 @@
                 app:mt_hint="Input Location"
                 app:mt_maxSuggestionsCount="10"
                 app:mt_searchBarColor="#EFEFEF"
-                app:mt_placeholder="@string/searching"/>
+                app:mt_placeholder="@string/searching"
+                app:mt_roundedSearchBarEnabled="true"/>
 
         </LinearLayout>
 

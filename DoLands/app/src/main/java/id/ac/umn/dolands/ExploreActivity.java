@@ -37,7 +37,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -104,6 +106,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                         gotoLocation(address.getLatitude(), address.getLongitude(), address.getLocality());
 
                         Toast.makeText(getApplicationContext(), address.getLocality(), Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Not Found", Toast.LENGTH_SHORT).show();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -287,8 +292,16 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         LatLng LatLng = new LatLng(latitude, longitude);
         MarkerOptions options = new MarkerOptions().position(LatLng).title(addressLocality);
 
-        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng, 14));
+        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng, 11));
         mGoogleMap.addMarker(options);
+
+        // Radius (meter)
+        CircleOptions circleOptions = new CircleOptions()
+                .center(LatLng)
+                .radius(10000.0)
+                .strokeColor(Color.YELLOW)
+                .fillColor(Color.argb(30,255,255,0));
+        mGoogleMap.addCircle(circleOptions);
     }
 
     // Maps
@@ -301,11 +314,12 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     supportMapFragment.getMapAsync(new OnMapReadyCallback() {
                         @Override
                         public void onMapReady(GoogleMap googleMap) {
-                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are Here!");
+//                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are Here!");
+//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
+//                            googleMap.addMarker(options);
 
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-                            googleMap.addMarker(options);
+                            gotoLocation(location.getLatitude(), location.getLongitude(), "You are Here!");
                         }
                     });
                 }
@@ -329,6 +343,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         mGoogleMap.setMyLocationEnabled(true);
+        mGoogleMap.setMapStyle(MapStyleOptions
+                .loadRawResourceStyle(getApplicationContext(), R.raw.style_json));
+        mGoogleMap.setTrafficEnabled(true);
     }
 
     // Back To Exit

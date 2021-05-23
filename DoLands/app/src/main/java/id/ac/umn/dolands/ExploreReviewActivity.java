@@ -23,6 +23,7 @@ public class ExploreReviewActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ExploreReviewActivity.this, ExploreDetailActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });

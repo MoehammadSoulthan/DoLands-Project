@@ -38,6 +38,7 @@ public class ExploreDetailActivity extends AppCompatActivity implements OnMapRea
             public void onClick(View v) {
                 Intent intent = new Intent(ExploreDetailActivity.this, ExploreReviewActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0,0);
                 finish();
             }
         });

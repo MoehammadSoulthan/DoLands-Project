@@ -53,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:minHeight="0dp"
-            android:textColor="@color/brown"
+            android:backgroundTint="@color/brown"
             android:text="@string/btn_detail"
             android:textAllCaps="false"
             android:fontFamily="@font/montserrat"
@@ -69,10 +69,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:backgroundTint="@color/brown"
+            android:backgroundTint="@color/yellow"
             android:minHeight="0dp"
             android:text="@string/btn_review"
             android:textAllCaps="false"
+            android:textColor="@color/brown"
             android:fontFamily="@font/montserrat"
             android:textSize="13sp"
             android:letterSpacing="0.1"/>
@@ -120,12 +121,12 @@
             android:layout_marginBottom="5dp"
             android:layout_marginEnd="11dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/gray_dark"
+            android:backgroundTint="@color/white"
             android:text="@string/btn_send"
             android:fontFamily="@font/montserrat"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/brown"
             android:textAllCaps="false"/>
     </RelativeLayout>
 
