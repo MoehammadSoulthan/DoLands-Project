@@ -38,6 +38,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -69,9 +70,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback {
     SupportMapFragment supportMapFragment;
@@ -85,6 +91,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private DatabaseReference reference;
     private String userID;
 
+    Helper helper;
+    ArrayList<LocationInfoModel> locationInfoModels;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +103,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         ivAttract2 = findViewById(R.id.attract2);
         ivAttract3 = findViewById(R.id.attract3);
         ivAttract4 = findViewById(R.id.attract4);
+
+        // Making ApiClient
+        helper = ApiClient.getClient().create(Helper.class);
 
         searchBar = findViewById(R.id.searchBar);
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
@@ -114,9 +126,9 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
                     if (addressList.size() > 0) {
                         Address address = addressList.get(0);
-                        gotoLocation(address.getLatitude(), address.getLongitude(), address.getLocality());
+                        gotoLocation(address.getLatitude(), address.getLongitude(), address.getFeatureName());
 
-                        Toast.makeText(getApplicationContext(), address.getLocality(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), address.getFeatureName(), Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Not Found", Toast.LENGTH_SHORT).show();
                     }
@@ -181,7 +193,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
         // Menu Bottom
         BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
-
         bottomNavigationView.setSelectedItemId(R.id.nav_explore);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -269,6 +280,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         getCurrentLocation();
     }
 
+    // Check GPS Status
     public void statusCheck() {
         final LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -277,6 +289,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
     }
 
+    // GPS Permission Alert
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This App needs the Location Permission, Please accept to use Location Functionality!")
@@ -295,11 +308,31 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         alert.show();
     }
 
+    // Maps
+    private void getCurrentLocation() {
+        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    supportMapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @SuppressLint("MissingPermission")
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            googleMap.setMyLocationEnabled(true);
+                            gotoLocation(location.getLatitude(), location.getLongitude(), "Current Location");
+                        }
+                    });
+                }
+            }
+        });
+    }
+
     // Goto Location Based On User Input
-    private void gotoLocation(double latitude, double longitude, String addressLocality) {
+    private void gotoLocation(double latitude, double longitude, String featureName) {
         mGoogleMap.clear();
         LatLng LatLng = new LatLng(latitude, longitude);
-        MarkerOptions options = new MarkerOptions().position(LatLng).title(addressLocality);
+        MarkerOptions options = new MarkerOptions().position(LatLng).title(featureName);
 
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng, 11));
         mGoogleMap.addMarker(options);
@@ -312,45 +345,58 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 .fillColor(Color.argb(30, 255, 255, 0));
         mGoogleMap.addCircle(circleOptions);
 
+        getNearbyPlace(longitude, latitude);
+
 //        Log.e("LatLng", latitude + " + " + longitude);
 
-        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + // Url
-                "?location=" + latitude + "," + longitude + // Location Latitude and Longitude
-                "&radius=10000" + // Nearby Radius
-                "&types=tourist_attraction" + // Place Type
-                "&sensor=true" + // Sensor
-                "&key=" + getResources().getString(R.string.API_1); // Google Map API Key
+//        String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + // Url
+//                "?location=" + latitude + "," + longitude + // Location Latitude and Longitude
+//                "&radius=10000" + // Nearby Radius
+//                "&types=tourist_attraction" + // Place Type
+//                "&sensor=true" + // Sensor
+//                "&key=" + getResources().getString(R.string.API_1); // Google Map API Key
 
-        // Execute place task method to download json data
-//        new PlaceTask().execute(url);
+//        String url = "https://api.opentripmap.com/0.1/en/places/" + // Url
+//                "radius?radius=10000" +
+//                "&lon=" + longitude +
+//                "&lat=" + latitude +
+//                "&kinds=amusements%2Cinteresting_places" +
+//                "&format=json" +
+//                "&apikey=5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0";
+//        Log.e("URL", url);
     }
 
-    // Maps
-    private void getCurrentLocation() {
-        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                        @SuppressLint("MissingPermission")
-                        @Override
-                        public void onMapReady(GoogleMap googleMap) {
-//                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//                            MarkerOptions options = new MarkerOptions().position(latLng).title("You are Here!");
-//                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14));
-//                            googleMap.addMarker(options);
+    private void getNearbyPlace(double longitude, double latitude) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("radius", "10000");
+        hashMap.put("lon", String.valueOf(longitude));
+        hashMap.put("lat", String.valueOf(latitude));
+        hashMap.put("kinds", "amusements,interesting_places");
+        hashMap.put("format", "json");
+        hashMap.put("apikey", "5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0");
 
-                            googleMap.setMyLocationEnabled(true);
-                            gotoLocation(location.getLatitude(), location.getLongitude(), "Current Location");
-                        }
-                    });
+        Call<ArrayList<LocationInfoModel>> locationInfoCallback = helper.getPost(hashMap);
+        locationInfoCallback.enqueue(new Callback<ArrayList<LocationInfoModel>>() {
+            @Override
+            public void onResponse(Call<ArrayList<LocationInfoModel>> call, Response<ArrayList<LocationInfoModel>> response) {
+                locationInfoModels = response.body();
+
+                if(locationInfoModels.size() > 0) {
+                    LatLng LatLngNearby = new LatLng(locationInfoModels.get(10).getPoint().getLat(), locationInfoModels.get(10).getPoint().getLon());
+                    MarkerOptions options = new MarkerOptions().position(LatLngNearby).title(locationInfoModels.get(10).getName());
+                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    mGoogleMap.addMarker(options);
                 }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<LocationInfoModel>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    // Maps
+    // Request Permission Maps
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 44) {
@@ -388,104 +434,5 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         backPressedTime = System.currentTimeMillis();
-    }
-
-    private class PlaceTask extends AsyncTask<String, Integer, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String data = null;
-            try {
-                // Initialize Data
-                data = downloadUrl(strings[0]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            // Execute Parser Task
-            new ParserTask().execute(s);
-        }
-    }
-
-    private String downloadUrl(String string) throws IOException {
-        // Initialize Url
-        URL url = new URL(string);
-        // Initialize Connection
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        // Connect connection
-        connection.connect();
-        // Initialize Input Stream
-        InputStream stream = connection.getInputStream();
-        // Initialize Buffer Reader
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-        // Initialize String Builder
-        StringBuilder builder = new StringBuilder();
-        // Initialize String Variable
-        String line = "";
-        // Use while loop
-        while((line = reader.readLine()) != null) {
-            // Append Line
-            builder.append(line);
-        }
-
-        // Get Append Data
-        String data = builder.toString();
-        // Close Reader
-        reader.close();
-        return data;
-    }
-
-    private class ParserTask extends AsyncTask<String, Integer, List<HashMap<String, String>>> {
-
-        @Override
-        protected List<HashMap<String, String>> doInBackground(String... strings) {
-            // Create JSON Parser  Class
-            JsonParser jsonParser = new JsonParser();
-            // Initialize Hash Map List
-            List<HashMap<String, String>> mapList = null;
-            JSONObject object = null;
-            try {
-                // Initialize Json Object
-                object = new JSONObject(strings[0]);
-                // Parse Json Object
-                mapList = jsonParser.parseResult(object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            // Return Map List
-            return mapList;
-        }
-
-        @Override
-        protected void onPostExecute(List<HashMap<String, String>> hashMaps) {
-            // Clear Map
-            mGoogleMap.clear();
-            // Use for loop
-            for(int i = 0; i < hashMaps.size(); i++) {
-                // Initialize Hash Map
-                HashMap<String, String> hashMapList = hashMaps.get(i);
-                // Get Latitude
-                double lat = Double.parseDouble(hashMapList.get("lat"));
-                // Get Longitude
-                double lng = Double.parseDouble(hashMapList.get("lng"));
-                // Get Name
-                String name = hashMapList.get("name");
-                // Concat Latitude & Longitude
-                LatLng latLng = new LatLng(lat, lng);
-                // Initialize Marker Options
-                MarkerOptions options = new MarkerOptions();
-                // Set Position
-                options.position(latLng);
-                // Set Title
-                options.title(name);
-                // Add Marker on Map
-                mGoogleMap.addMarker(options);
-
-            }
-        }
     }
 }

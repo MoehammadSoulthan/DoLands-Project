@@ -47,4 +47,5 @@
     <string name="update">Update</string>
     <string name="API_1">AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek</string>
     <string name="API_2">AIzaSyD2mQdMJ0vv1Yl2MSqrWwCuEIKRqqGU5So</string>
+    <string name="opentripmap_API">5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0</string>
 </resources>

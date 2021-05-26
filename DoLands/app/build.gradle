@@ -58,4 +58,8 @@ dependencies {
 
     // https://github.com/mancj/MaterialSearchBar
     implementation 'com.github.mancj:MaterialSearchBar:0.8.3'
+
+    // https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
 }
