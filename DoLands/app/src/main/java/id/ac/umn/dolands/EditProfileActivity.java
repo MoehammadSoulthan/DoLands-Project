@@ -125,9 +125,6 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 updateUserInfo();
-                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
             }
         });
 
@@ -195,15 +192,16 @@ public class EditProfileActivity extends AppCompatActivity {
             sessionManager.logout();
             sessionManager.createLoginSession(username, fullname, email);
             Toast.makeText(this, "Data Has Been Updated!", Toast.LENGTH_LONG).show();
-        }
-        else {
-            Toast.makeText(this, "Data Is Same Cannot Be Updated!", Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
     private boolean checkValidation() {
         if(!username.equals(etUsername.getText().toString()) || !fullname.equals(etFullname.getText().toString())) {
-            if(username.isEmpty()) {
+            if(etUsername.getText().toString().isEmpty()) {
                 etUsername.setError("Username is Required!");
                 etUsername.requestFocus();
                 return false;
@@ -216,7 +214,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 updateUsernameInPicture(username, imageRef);
             }
 
-            if(fullname.isEmpty()) {
+            if(etFullname.getText().toString().isEmpty()) {
                 etFullname.setError("Fullname is Required!");
                 etFullname.requestFocus();
                 return false;
@@ -229,6 +227,7 @@ public class EditProfileActivity extends AppCompatActivity {
             return true;
         }
         else {
+            Toast.makeText(this, "Data Is Same Cannot Be Updated!", Toast.LENGTH_LONG).show();
             return false;
         }
     }
