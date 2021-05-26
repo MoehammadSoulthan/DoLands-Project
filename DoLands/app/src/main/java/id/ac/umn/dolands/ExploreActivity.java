@@ -3,7 +3,8 @@ package id.ac.umn.dolands;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -19,11 +20,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -53,25 +50,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -86,6 +70,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     private long backPressedTime;
     MaterialSearchBar searchBar;
     GoogleMap mGoogleMap;
+    RecyclerView rvNearbyExplore;
+    NearbyExploreAdapter nearbyExploreAdapter;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -93,16 +79,24 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
     Helper helper;
     ArrayList<LocationInfoModel> locationInfoModels;
+    NearbyDetailModel nearbyDetailModels;
+    LinkedList<NearbyDetailModel> listNearbyDetail = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-        ivAttract1 = findViewById(R.id.attract1);
-        ivAttract2 = findViewById(R.id.attract2);
-        ivAttract3 = findViewById(R.id.attract3);
-        ivAttract4 = findViewById(R.id.attract4);
+//        ivAttract1 = findViewById(R.id.attract1);
+//        ivAttract2 = findViewById(R.id.attract2);
+//        ivAttract3 = findViewById(R.id.attract3);
+//        ivAttract4 = findViewById(R.id.attract4);
+
+        // Explore Detail RecyclerView
+        rvNearbyExplore = findViewById(R.id.rvNearbyExplore);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvNearbyExplore.setLayoutManager(linearLayoutManager);
 
         // Making ApiClient
         helper = ApiClient.getClient().create(Helper.class);
@@ -119,7 +113,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 //                startSearch(text.toString(), true, null, true);
                 String locationName = text.toString();
                 Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
-
 
                 try {
                     List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
@@ -143,37 +136,37 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         });
 
         // Intent to Detail
-        ivAttract1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        ivAttract2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        ivAttract3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        ivAttract4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-                startActivity(intent);
-            }
-        });
+//        ivAttract1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        ivAttract2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        ivAttract3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        });
+//
+//        ivAttract4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         // User Login
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -234,7 +227,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                             reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    User userProfile = snapshot.getValue(User.class);
+                                    UserModel userProfile = snapshot.getValue(UserModel.class);
 
                                     if (userProfile != null) {
                                         String username = userProfile.username;
@@ -360,7 +353,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 //                "radius?radius=10000" +
 //                "&lon=" + longitude +
 //                "&lat=" + latitude +
-//                "&kinds=amusements%2Cinteresting_places" +
+//                "&kinds=amusements,natural" +
 //                "&format=json" +
 //                "&apikey=5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0";
 //        Log.e("URL", url);
@@ -371,26 +364,63 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         hashMap.put("radius", "10000");
         hashMap.put("lon", String.valueOf(longitude));
         hashMap.put("lat", String.valueOf(latitude));
-        hashMap.put("kinds", "amusements,interesting_places");
+        hashMap.put("kinds", "amusements,natural");
         hashMap.put("format", "json");
-        hashMap.put("apikey", "5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0");
+        hashMap.put("apikey", getString(R.string.opentripmap_API));
 
-        Call<ArrayList<LocationInfoModel>> locationInfoCallback = helper.getPost(hashMap);
+        Call<ArrayList<LocationInfoModel>> locationInfoCallback = helper.getLocation(hashMap);
         locationInfoCallback.enqueue(new Callback<ArrayList<LocationInfoModel>>() {
             @Override
             public void onResponse(Call<ArrayList<LocationInfoModel>> call, Response<ArrayList<LocationInfoModel>> response) {
                 locationInfoModels = response.body();
 
-                if(locationInfoModels.size() > 0) {
-                    LatLng LatLngNearby = new LatLng(locationInfoModels.get(10).getPoint().getLat(), locationInfoModels.get(10).getPoint().getLon());
-                    MarkerOptions options = new MarkerOptions().position(LatLngNearby).title(locationInfoModels.get(10).getName());
-                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    mGoogleMap.addMarker(options);
+                if(locationInfoModels != null) {
+                    listNearbyDetail.clear(); // Clear All After Search Input
+                    for(int i = 0; i < locationInfoModels.size(); i++) {
+                        if(!locationInfoModels.get(i).getName().equals("")) {
+                            LatLng LatLngNearby = new LatLng(locationInfoModels.get(i).getPoint().getLat(), locationInfoModels.get(i).getPoint().getLon());
+                            MarkerOptions options = new MarkerOptions().position(LatLngNearby).title(locationInfoModels.get(i).getName());
+                            options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            mGoogleMap.addMarker(options);
+
+                            getNearbyPlaceDetail(locationInfoModels.get(i).getXid());
+                            Log.e("XID", locationInfoModels.get(i).getXid());
+                        }
+                    }
                 }
+
+//                if(locationInfoModels.size() > 0) {
+//                    LatLng LatLngNearby = new LatLng(locationInfoModels.get(10).getPoint().getLat(), locationInfoModels.get(10).getPoint().getLon());
+//                    MarkerOptions options = new MarkerOptions().position(LatLngNearby).title(locationInfoModels.get(10).getName());
+//                    options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+//                    mGoogleMap.addMarker(options);
+//                }
             }
 
             @Override
             public void onFailure(Call<ArrayList<LocationInfoModel>> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getNearbyPlaceDetail(String xid) {
+        Call<NearbyDetailModel> nearbyDetailCallback = helper.getLocationDetail(xid, getString(R.string.opentripmap_API));
+        nearbyDetailCallback.enqueue(new Callback<NearbyDetailModel>() {
+            @Override
+            public void onResponse(Call<NearbyDetailModel> call, Response<NearbyDetailModel> response) {
+                nearbyDetailModels = response.body();
+
+                if(nearbyDetailModels != null) {
+                    listNearbyDetail.add(response.body());
+
+                    nearbyExploreAdapter = new NearbyExploreAdapter(listNearbyDetail);
+                    rvNearbyExplore.setAdapter(nearbyExploreAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<NearbyDetailModel> call, Throwable t) {
                 Toast.makeText(getApplicationContext(), t.toString(), Toast.LENGTH_SHORT).show();
             }
         });
