@@ -52,4 +52,5 @@
     <string name="save_location">Save Location</string>
     <string name="no_saved_yet">You Have No Saved Location Yet</string>
     <string name="clear_all_saved">Clear All</string>
+    <string name="save_attraction">Save Attraction</string>
 </resources>
