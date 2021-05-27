@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,7 +64,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class ExploreActivity extends AppCompatActivity implements OnMapReadyCallback, NearbyExploreAdapter.ClickedItem {
     SupportMapFragment supportMapFragment;
     FusedLocationProviderClient client;
     ImageView ivAttract1, ivAttract2, ivAttract3, ivAttract4;
@@ -72,6 +73,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     GoogleMap mGoogleMap;
     RecyclerView rvNearbyExplore;
     NearbyExploreAdapter nearbyExploreAdapter;
+    LinearLayout notFoundText, rvPlaceholder;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -87,16 +89,19 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore);
 
-//        ivAttract1 = findViewById(R.id.attract1);
-//        ivAttract2 = findViewById(R.id.attract2);
-//        ivAttract3 = findViewById(R.id.attract3);
-//        ivAttract4 = findViewById(R.id.attract4);
+        notFoundText = findViewById(R.id.notFoundText);
+        notFoundText.setVisibility(View.VISIBLE);
+        rvPlaceholder = findViewById(R.id.rvPlaceholder);
+        rvPlaceholder.setVisibility(View.GONE);
 
         // Explore Detail RecyclerView
         rvNearbyExplore = findViewById(R.id.rvNearbyExplore);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvNearbyExplore.setLayoutManager(linearLayoutManager);
+
+        // Set nearbyExploreAdapter
+        nearbyExploreAdapter = new NearbyExploreAdapter(this);
 
         // Making ApiClient
         helper = ApiClient.getClient().create(Helper.class);
@@ -118,6 +123,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     List<Address> addressList = geocoder.getFromLocationName(locationName, 1);
 
                     if (addressList.size() > 0) {
+                        listNearbyDetail.clear(); // Clear All After Search Input
                         Address address = addressList.get(0);
                         gotoLocation(address.getLatitude(), address.getLongitude(), address.getFeatureName());
 
@@ -134,39 +140,6 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
             public void onButtonClicked(int buttonCode) {
             }
         });
-
-        // Intent to Detail
-//        ivAttract1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        ivAttract2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        ivAttract3.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-//
-//        ivAttract4.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(ExploreActivity.this, ExploreDetailActivity.class);
-//                startActivity(intent);
-//            }
-//        });
 
         // User Login
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -376,6 +349,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
 
                 if(locationInfoModels != null) {
                     listNearbyDetail.clear(); // Clear All After Search Input
+                    notFoundText.setVisibility(View.GONE);
+                    rvPlaceholder.setVisibility(View.VISIBLE);
                     for(int i = 0; i < locationInfoModels.size(); i++) {
                         if(!locationInfoModels.get(i).getName().equals("")) {
                             LatLng LatLngNearby = new LatLng(locationInfoModels.get(i).getPoint().getLat(), locationInfoModels.get(i).getPoint().getLon());
@@ -384,7 +359,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                             mGoogleMap.addMarker(options);
 
                             getNearbyPlaceDetail(locationInfoModels.get(i).getXid());
-                            Log.e("XID", locationInfoModels.get(i).getXid());
+//                            Log.e("XID", locationInfoModels.get(i).getXid());
                         }
                     }
                 }
@@ -414,7 +389,8 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                 if(nearbyDetailModels != null) {
                     listNearbyDetail.add(response.body());
 
-                    nearbyExploreAdapter = new NearbyExploreAdapter(listNearbyDetail);
+//                    nearbyExploreAdapter = new NearbyExploreAdapter(listNearbyDetail);
+                    nearbyExploreAdapter.setData(listNearbyDetail);
                     rvNearbyExplore.setAdapter(nearbyExploreAdapter);
                 }
             }
@@ -464,5 +440,20 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         backPressedTime = System.currentTimeMillis();
+    }
+
+    // Show Detail When Image Clicked
+    @Override
+    public void ClickedImage(NearbyDetailModel nearbyDetailModel) {
+//        Log.e("Clicked Item", nearbyDetailModel.getName());
+        startActivity(new Intent(this, ExploreDetailActivity.class)
+                .putExtra("name", nearbyDetailModel.getName())
+                .putExtra("roadName", nearbyDetailModel.getAddress().getRoad())
+                .putExtra("county", nearbyDetailModel.getAddress().getCounty())
+                .putExtra("country", nearbyDetailModel.getAddress().getCountry())
+                .putExtra("postcode", nearbyDetailModel.getAddress().getPostcode())
+                .putExtra("stateDistrict", nearbyDetailModel.getAddress().getStateDistrict())
+                .putExtra("lon", nearbyDetailModel.getPoint().getLon())
+                .putExtra("lat", nearbyDetailModel.getPoint().getLat()));
     }
 }

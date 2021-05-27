@@ -10,7 +10,7 @@
     <string name="attract_name">Disneyland</string>
     <string name="btn_detail">Detail</string>
     <string name="btn_review">Review</string>
-    <string name="detail_location">Location</string>
+    <string name="detail_location">Location Information</string>
     <string name="isi_detail_location">RT.12/RW.06, Gn. Princi, \nJatiarjo, Kec. Prigen, \nPasuruan, Jawa Timur 67157</string>
     <string name="detail_time">Open Hours</string>
     <string name="isi_detail_time">Senin - Jumat\n10.00 - 21.00 WIB\nSabtu - Minggu\n09.00 - 22.00 WIB</string>
@@ -48,4 +48,6 @@
     <string name="API_1">AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek</string>
     <string name="API_2">AIzaSyD2mQdMJ0vv1Yl2MSqrWwCuEIKRqqGU5So</string>
     <string name="opentripmap_API">5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0</string>
+    <string name="nearby_tourist_attraction_not_found">Nearby Tourist Attraction not Found</string>
+    <string name="save_location">Save Location</string>
 </resources>

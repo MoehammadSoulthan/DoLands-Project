@@ -16,9 +16,15 @@ import java.util.LinkedList;
 
 public class NearbyExploreAdapter extends RecyclerView.Adapter<NearbyExploreAdapter.NearbyExploreViewHolder>{
     LinkedList<NearbyDetailModel> details;
+    ClickedItem clickedItem;
 
-    public NearbyExploreAdapter(LinkedList<NearbyDetailModel> nearbyDetailModels) {
+    public void setData(LinkedList<NearbyDetailModel> nearbyDetailModels) {
         this.details = nearbyDetailModels;
+        notifyDataSetChanged();
+    }
+
+    public NearbyExploreAdapter(ClickedItem clickedItem) {
+        this.clickedItem = clickedItem;
     }
 
     @NonNull
@@ -31,6 +37,8 @@ public class NearbyExploreAdapter extends RecyclerView.Adapter<NearbyExploreAdap
     @Override
     public void onBindViewHolder(@NonNull NearbyExploreViewHolder holder, int position) {
 //        holder.attractImg.setImageDrawable(details.get(position).getPreview().getSource());
+        NearbyDetailModel nearbyDetailModel = details.get(position);
+
         try {
             Picasso.get()
                     .load(details.get(position).getPreview().getSource())
@@ -44,6 +52,16 @@ public class NearbyExploreAdapter extends RecyclerView.Adapter<NearbyExploreAdap
         }
 
         holder.attractName.setText(details.get(position).getName());
+        holder.attractImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickedItem.ClickedImage(nearbyDetailModel);
+            }
+        });
+    }
+
+    public interface ClickedItem {
+        public void ClickedImage(NearbyDetailModel nearbyDetailModel);
     }
 
     @Override
