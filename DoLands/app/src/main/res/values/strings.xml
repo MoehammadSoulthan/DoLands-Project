@@ -51,4 +51,5 @@
     <string name="nearby_tourist_attraction_not_found">Nearby Tourist Attraction not Found</string>
     <string name="save_location">Save Location</string>
     <string name="no_saved_yet">You Have No Saved Location Yet</string>
+    <string name="clear_all_saved">Clear All</string>
 </resources>
