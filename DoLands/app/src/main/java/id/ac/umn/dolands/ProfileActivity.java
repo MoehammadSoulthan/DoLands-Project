@@ -94,25 +94,11 @@ public class ProfileActivity extends AppCompatActivity {
 //            });
 //        }
 
-        // Display Profile Image
+        // Firebase Instance
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         Uid = mAuth.getCurrentUser().getUid();
-
-        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    String username_img = task.getResult().getString("username");
-                    String imageUrl = task.getResult().getString("image");
-//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
-                    if(imageUrl != null) {
-                        Glide.with(ProfileActivity.this).load(imageUrl).into(circleImageView);
-                    }
-                }
-            }
-        });
 
         tvSaved.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +170,26 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Display Profile Image
+        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String username_img = task.getResult().getString("username");
+                    String imageUrl = task.getResult().getString("image");
+//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
+                    if(imageUrl != null) {
+                        Glide.with(ProfileActivity.this).load(imageUrl).into(circleImageView);
+                    }
+                }
+            }
+        });
     }
 
     private void showAllUserData() {

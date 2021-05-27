@@ -74,6 +74,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     RecyclerView rvNearbyExplore;
     NearbyExploreAdapter nearbyExploreAdapter;
     LinearLayout notFoundText, rvPlaceholder;
+    BottomNavigationView bottomNavigationView;
 
     private FirebaseUser user;
     private DatabaseReference reference;
@@ -158,7 +159,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
         }
 
         // Menu Bottom
-        BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
+        bottomNavigationView = findViewById(R.id.navBottom);
         bottomNavigationView.setSelectedItemId(R.id.nav_explore);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -167,32 +168,7 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                     case R.id.nav_profile:
                         if (user == null) {
                             // Popup Alert Login
-                            Dialog popup = new Dialog(ExploreActivity.this);
-                            popup.setContentView(R.layout.popup_login);
-
-                            popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            popup.setCancelable(false);
-
-                            Button btn_ok = popup.findViewById(R.id.button_ok);
-                            TextView tv_skip = popup.findViewById(R.id.text_skip);
-
-                            btn_ok.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    popup.dismiss();
-                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                    finishAffinity();
-                                }
-                            });
-
-                            tv_skip.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    bottomNavigationView.setSelectedItemId(R.id.nav_explore);
-                                    popup.dismiss();
-                                }
-                            });
-                            popup.show();
+                            loginPopup();
                             return true;
                         } else {
                             reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -244,6 +220,35 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onPause() {
         super.onPause();
         getCurrentLocation();
+    }
+
+    public void loginPopup() {
+        Dialog popup = new Dialog(ExploreActivity.this);
+        popup.setContentView(R.layout.popup_login);
+
+        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popup.setCancelable(false);
+
+        Button btn_ok = popup.findViewById(R.id.button_ok);
+        TextView tv_skip = popup.findViewById(R.id.text_skip);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finishAffinity();
+            }
+        });
+
+        tv_skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bottomNavigationView.setSelectedItemId(R.id.nav_explore);
+                popup.dismiss();
+            }
+        });
+        popup.show();
     }
 
     // Check GPS Status
@@ -446,14 +451,36 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void ClickedImage(NearbyDetailModel nearbyDetailModel) {
 //        Log.e("Clicked Item", nearbyDetailModel.getName());
-        startActivity(new Intent(this, ExploreDetailActivity.class)
-                .putExtra("name", nearbyDetailModel.getName())
-                .putExtra("roadName", nearbyDetailModel.getAddress().getRoad())
-                .putExtra("county", nearbyDetailModel.getAddress().getCounty())
-                .putExtra("country", nearbyDetailModel.getAddress().getCountry())
-                .putExtra("postcode", nearbyDetailModel.getAddress().getPostcode())
-                .putExtra("stateDistrict", nearbyDetailModel.getAddress().getStateDistrict())
-                .putExtra("lon", nearbyDetailModel.getPoint().getLon())
-                .putExtra("lat", nearbyDetailModel.getPoint().getLat()));
+        if(user == null) {
+            loginPopup();
+        } else {
+            Intent intent = new Intent(this, ExploreDetailActivity.class);
+            try {
+                intent.putExtra("xid", nearbyDetailModel.getXid())
+                        .putExtra("name", nearbyDetailModel.getName())
+                        .putExtra("roadName", nearbyDetailModel.getAddress().getRoad())
+                        .putExtra("county", nearbyDetailModel.getAddress().getCounty())
+                        .putExtra("country", nearbyDetailModel.getAddress().getCountry())
+                        .putExtra("postcode", nearbyDetailModel.getAddress().getPostcode())
+                        .putExtra("stateDistrict", nearbyDetailModel.getAddress().getStateDistrict())
+                        .putExtra("lon", nearbyDetailModel.getPoint().getLon())
+                        .putExtra("lat", nearbyDetailModel.getPoint().getLat())
+                        .putExtra("image", nearbyDetailModel.getPreview().getSource());
+            }
+            catch (NullPointerException e) {
+                intent.putExtra("xid", nearbyDetailModel.getXid())
+                        .putExtra("name", nearbyDetailModel.getName())
+                        .putExtra("roadName", nearbyDetailModel.getAddress().getRoad())
+                        .putExtra("county", nearbyDetailModel.getAddress().getCounty())
+                        .putExtra("country", nearbyDetailModel.getAddress().getCountry())
+                        .putExtra("postcode", nearbyDetailModel.getAddress().getPostcode())
+                        .putExtra("stateDistrict", nearbyDetailModel.getAddress().getStateDistrict())
+                        .putExtra("lon", nearbyDetailModel.getPoint().getLon())
+                        .putExtra("lat", nearbyDetailModel.getPoint().getLat())
+                        .putExtra("image", "");
+            }
+
+            startActivity(intent);
+        }
     }
 }

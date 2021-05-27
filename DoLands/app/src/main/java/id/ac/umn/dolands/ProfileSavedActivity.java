@@ -3,10 +3,13 @@ package id.ac.umn.dolands;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,22 +23,29 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileSavedActivity extends AppCompatActivity {
+public class ProfileSavedActivity extends AppCompatActivity implements ProfileSavedAdapter.ClickedItem {
     private Button btnEditProfile;
     private ImageButton imgBtnExit;
-    private TextView tvMyReview, tvUsername, tvFullName, tvEmail;;
-    private RelativeLayout rlSaved1;
+    private TextView tvMyReview, tvUsername, tvFullName, tvEmail, tvNoSavedYet;
     private CircleImageView circleImageView;
+    private RecyclerView rvSaved;
+    private ProfileSavedAdapter profileSavedAdapter;
 
+    // Firebase
     private FirebaseAuth mAuth;
     private FirebaseUser isLogin;
     private DatabaseReference reference;
@@ -43,6 +53,7 @@ public class ProfileSavedActivity extends AppCompatActivity {
     private SessionManager sessionManager;
     private FirebaseFirestore firestore;
     private String Uid;
+    private List<SavedLocationModel> savedLocationModelList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +63,24 @@ public class ProfileSavedActivity extends AppCompatActivity {
         imgBtnExit = findViewById(R.id.imgbutton_exit);
         btnEditProfile = findViewById(R.id.button_editprofile);
         tvMyReview = findViewById(R.id.text_my_review);
-        rlSaved1 = findViewById(R.id.saved_attract1);
         circleImageView = findViewById(R.id.circleImageView);
+        tvNoSavedYet = findViewById(R.id.tvNoSavedYet);
 
         tvUsername = findViewById(R.id.text_user_username);
         tvFullName = findViewById(R.id.text_user_fullname);
         tvEmail = findViewById(R.id.text_user_email);
+
+        // Saved Detail RecyclerView
+        rvSaved = findViewById(R.id.rvSaved);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvSaved.setLayoutManager(linearLayoutManager);
+
+        // Set profileSavedAdapter
+        profileSavedAdapter = new ProfileSavedAdapter(this);
+
+        // savedLocationModelList
+        savedLocationModelList = new ArrayList<>();
 
         // Show User Information
         sessionManager = new SessionManager(ProfileSavedActivity.this);
@@ -80,15 +103,6 @@ public class ProfileSavedActivity extends AppCompatActivity {
                         Glide.with(ProfileSavedActivity.this).load(imageUrl).into(circleImageView);
                     }
                 }
-            }
-        });
-
-        rlSaved1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProfileSavedActivity.this, ExploreDetailActivity.class);
-                startActivity(intent);
-//                finish();
             }
         });
 
@@ -164,6 +178,38 @@ public class ProfileSavedActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Retrieving Saved Place From Firebase
+        FirebaseDatabase.getInstance().getReference("SavedPlace").child(Uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.e("KEY", String.valueOf(snapshot));
+                savedLocationModelList.clear();
+                for(DataSnapshot savedLocationSnapshot: snapshot.getChildren()) {
+                    SavedLocationModel savedLocationModel = savedLocationSnapshot.getValue(SavedLocationModel.class);
+                    savedLocationModelList.add(savedLocationModel);
+                }
+
+                profileSavedAdapter.setData(savedLocationModelList);
+                rvSaved.setAdapter(profileSavedAdapter);
+
+                if(!savedLocationModelList.isEmpty()) {
+                    rvSaved.setVisibility(View.VISIBLE);
+                    tvNoSavedYet.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    // Show User Data From Session
     private void showAllUserData() {
         HashMap<String, String> userDetails = sessionManager.getUsersDetailFromSession();
 
@@ -181,5 +227,21 @@ public class ProfileSavedActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    @Override
+    public void ClickedImage(SavedLocationModel savedLocationModel) {
+        Intent intent = new Intent(this, ExploreDetailActivity.class);
+        intent.putExtra("xid", savedLocationModel.getXid())
+                .putExtra("name", savedLocationModel.getName())
+                .putExtra("roadName", savedLocationModel.getRoadName())
+                .putExtra("county", savedLocationModel.getCounty())
+                .putExtra("country", savedLocationModel.getCountry())
+                .putExtra("postcode", savedLocationModel.getPostcode())
+                .putExtra("stateDistrict", savedLocationModel.getStateDistrict())
+                .putExtra("lon", savedLocationModel.getLon())
+                .putExtra("lat", savedLocationModel.getLat())
+                .putExtra("image", savedLocationModel.getImage());
+        startActivity(intent);
     }
 }
