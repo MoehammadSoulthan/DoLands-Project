@@ -94,158 +94,13 @@
             <LinearLayout
                 android:id="@+id/rvPlaceholder"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
+                android:layout_height="match_parent"
                 android:gravity="center_horizontal">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvNearbyExplore"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"/>
-
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="horizontal">-->
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginEnd="15dp">-->
-
-<!--                        <com.google.android.material.imageview.ShapeableImageView-->
-<!--                            android:id="@+id/attract1"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:scaleType="centerCrop"-->
-<!--                            app:shapeAppearanceOverlay="@style/roundedImageView"-->
-<!--                            android:src="@drawable/disney1"/>-->
-
-<!--                        <View-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@drawable/transparency"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_alignParentBottom="true"-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:gravity="end"-->
-<!--                            android:layout_marginBottom="15dp"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:text="@string/attract_name"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="17sp"-->
-<!--                            android:fontFamily="@font/quicksand"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:letterSpacing="0.15"/>-->
-<!--                    </RelativeLayout>-->
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginEnd="15dp">-->
-
-<!--                        <com.google.android.material.imageview.ShapeableImageView-->
-<!--                            android:id="@+id/attract2"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:scaleType="centerCrop"-->
-<!--                            app:shapeAppearanceOverlay="@style/roundedImageView"-->
-<!--                            android:src="@drawable/disney2"/>-->
-
-<!--                        <View-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@drawable/transparency"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_alignParentBottom="true"-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:gravity="end"-->
-<!--                            android:layout_marginBottom="15dp"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:text="Taman Mini Indonesia Indah"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="17sp"-->
-<!--                            android:fontFamily="@font/quicksand"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:letterSpacing="0.15"/>-->
-<!--                    </RelativeLayout>-->
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginEnd="15dp">-->
-
-<!--                        <com.google.android.material.imageview.ShapeableImageView-->
-<!--                            android:id="@+id/attract3"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:scaleType="centerCrop"-->
-<!--                            app:shapeAppearanceOverlay="@style/roundedImageView"-->
-<!--                            android:src="@drawable/disney3"/>-->
-
-<!--                        <View-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@drawable/transparency"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_alignParentBottom="true"-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:gravity="end"-->
-<!--                            android:layout_marginBottom="15dp"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:text="Wisata Bahari Lamongan"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="17sp"-->
-<!--                            android:fontFamily="@font/quicksand"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:letterSpacing="0.15"/>-->
-<!--                    </RelativeLayout>-->
-
-<!--                    <RelativeLayout-->
-<!--                        android:layout_width="150dp"-->
-<!--                        android:layout_height="match_parent"-->
-<!--                        android:layout_marginEnd="15dp">-->
-
-<!--                        <com.google.android.material.imageview.ShapeableImageView-->
-<!--                            android:id="@+id/attract4"-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:scaleType="centerCrop"-->
-<!--                            app:shapeAppearanceOverlay="@style/roundedImageView"-->
-<!--                            android:src="@drawable/disney1"/>-->
-
-<!--                        <View-->
-<!--                            android:layout_width="match_parent"-->
-<!--                            android:layout_height="match_parent"-->
-<!--                            android:background="@drawable/transparency"/>-->
-
-<!--                        <TextView-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:layout_alignParentBottom="true"-->
-<!--                            android:layout_alignParentEnd="true"-->
-<!--                            android:gravity="end"-->
-<!--                            android:layout_marginBottom="15dp"-->
-<!--                            android:layout_marginEnd="10dp"-->
-<!--                            android:text="Dunia Fantasi"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:textSize="17sp"-->
-<!--                            android:fontFamily="@font/quicksand"-->
-<!--                            android:textStyle="bold"-->
-<!--                            android:letterSpacing="0.15"/>-->
-<!--                    </RelativeLayout>-->
-
-<!--                </LinearLayout>-->
-
             </LinearLayout>
 
             <LinearLayout
@@ -260,10 +115,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/nearby_tourist_attraction_not_found"
-                    android:textSize="22dp"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/brown"/>
+                    android:textStyle="bold|italic"
+                    android:textSize="20sp"
+                    android:letterSpacing="0.05"
+                    android:textColor="@color/gray"
+                    android:fontFamily="@font/questrial"
+                    android:gravity="center"/>
             </LinearLayout>
 
         </LinearLayout>

@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +42,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileSavedActivity extends AppCompatActivity implements ProfileSavedAdapter.ClickedItem {
-    private Button btnEditProfile;
+    private Button btnEditProfile, btnClearAllSaved;
     private ImageButton imgBtnExit;
     private TextView tvMyReview, tvUsername, tvFullName, tvEmail, tvNoSavedYet;
     private CircleImageView circleImageView;
@@ -65,6 +69,7 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
         tvMyReview = findViewById(R.id.text_my_review);
         circleImageView = findViewById(R.id.circleImageView);
         tvNoSavedYet = findViewById(R.id.tvNoSavedYet);
+        btnClearAllSaved = findViewById(R.id.button_clear_all_saved);
 
         tvUsername = findViewById(R.id.text_user_username);
         tvFullName = findViewById(R.id.text_user_fullname);
@@ -106,6 +111,7 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
             }
         });
 
+        // Go To My Review Activity
         tvMyReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +122,7 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
             }
         });
 
+        // Button Edit Profile
         btnEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +132,7 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
             }
         });
 
+        // Button Logout
         imgBtnExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,8 +166,16 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
             }
         });
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
+        // Button Clear All Saved Attraction
+        btnClearAllSaved.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearAllSavedAttr();
+            }
+        });
 
+        // Navigation Bar
+        BottomNavigationView bottomNavigationView = findViewById(R.id.navBottom);
         bottomNavigationView.setSelectedItemId(R.id.nav_profile);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -199,6 +215,7 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
                 if(!savedLocationModelList.isEmpty()) {
                     rvSaved.setVisibility(View.VISIBLE);
                     tvNoSavedYet.setVisibility(View.GONE);
+                    btnClearAllSaved.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -220,6 +237,40 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
         tvUsername.setText(username);
         tvFullName.setText(fullname);
         tvEmail.setText(email);
+    }
+
+    private void clearAllSavedAttr() {
+        Dialog popup = new Dialog(ProfileSavedActivity.this);
+        popup.setContentView(R.layout.popup_clear_saved_attr);
+
+        popup.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        popup.setCancelable(false);
+
+        Button btn_ok = popup.findViewById(R.id.button_ok);
+        TextView tv_cancel = popup.findViewById(R.id.text_cancel);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Delete All Saved Attraction From Firebase
+                FirebaseDatabase.getInstance().getReference("SavedPlace").child(Uid).removeValue();
+                Toast.makeText(getApplicationContext(), "Successfully Clear All Saved Attraction!", Toast.LENGTH_SHORT).show();
+
+                popup.dismiss();
+                startActivity(new Intent(getApplicationContext(), ProfileSavedActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+//                finishAffinity();
+            }
+        });
+
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup.dismiss();
+            }
+        });
+        popup.show();
     }
 
     @Override

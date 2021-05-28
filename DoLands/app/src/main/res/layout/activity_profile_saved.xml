@@ -207,7 +207,7 @@
                 android:id="@+id/button_clear_all_saved"
                 android:layout_width="270dp"
                 android:layout_height="0dp"
-                android:layout_weight="0.1"
+                android:layout_weight="0.12"
                 android:layout_margin="3dp"
                 android:layout_gravity="center"
                 android:textColor="@color/yellow"

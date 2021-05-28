@@ -364,9 +364,14 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                             mGoogleMap.addMarker(options);
 
                             getNearbyPlaceDetail(locationInfoModels.get(i).getXid());
-//                            Log.e("XID", locationInfoModels.get(i).getXid());
+                            Log.e("XID", locationInfoModels.get(i).getXid());
                         }
                     }
+                }
+
+                if(locationInfoModels.size() == 0) {
+                    notFoundText.setVisibility(View.VISIBLE);
+                    rvPlaceholder.setVisibility(View.GONE);
                 }
 
 //                if(locationInfoModels.size() > 0) {

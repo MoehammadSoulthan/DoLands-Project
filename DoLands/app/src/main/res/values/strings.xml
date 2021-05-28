@@ -48,9 +48,12 @@
     <string name="API_1">AIzaSyCtFur7XPwtPUxZR6TPPyYX3NCpgB9l0Ek</string>
     <string name="API_2">AIzaSyD2mQdMJ0vv1Yl2MSqrWwCuEIKRqqGU5So</string>
     <string name="opentripmap_API">5ae2e3f221c38a28845f05b60967e742718eec2d1af005dd5c8deea0</string>
-    <string name="nearby_tourist_attraction_not_found">Nearby Tourist Attraction not Found</string>
+    <string name="nearby_tourist_attraction_not_found">Nearby Attraction not Found</string>
     <string name="save_location">Save Location</string>
     <string name="no_saved_yet">You Have No Saved Location Yet</string>
     <string name="clear_all_saved">Clear All</string>
     <string name="save_attraction">Save Attraction</string>
+    <string name="cancel_text">Cancel</string>
+    <string name="clear_all_confirmation">Are You Sure Want to Clear All Saved Attraction?</string>
+    <string name="okay_text">Okay</string>
 </resources>
