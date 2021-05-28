@@ -4,6 +4,8 @@ package id.ac.umn.dolands;
         import androidx.appcompat.app.ActionBar;
         import androidx.appcompat.app.AlertDialog;
         import androidx.appcompat.app.AppCompatActivity;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
         import android.content.DialogInterface;
         import android.content.Intent;
@@ -33,16 +35,22 @@ package id.ac.umn.dolands;
         import com.google.firebase.firestore.DocumentSnapshot;
         import com.google.firebase.firestore.FirebaseFirestore;
 
+        import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.List;
 
         import de.hdodenhof.circleimageview.CircleImageView;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ProfileSavedAdapter.ClickedItem {
     private Button btnEditProfile;
     private ImageButton imgBtnExit;
-    private TextView tvSaved, tvUsername, tvFullName, tvEmail;
+    private TextView tvSaved, tvUsername, tvFullName, tvEmail, tvNoReviewYet;
     private CircleImageView circleImageView;
+    private RecyclerView rvMyReview;
+    private ProfileSavedAdapter myReviewAdapter;
+    private List<SavedLocationModel> myReviewModelList;
 
+    // Firebase
     private FirebaseAuth mAuth;
     private FirebaseUser isLogin;
     private DatabaseReference reference;
@@ -63,42 +71,29 @@ public class ProfileActivity extends AppCompatActivity {
         tvFullName = findViewById(R.id.text_user_fullname);
         tvEmail = findViewById(R.id.text_user_email);
         circleImageView = findViewById(R.id.circleImageView);
+        tvNoReviewYet = findViewById(R.id.tvNoReviewYet);
 
         // Show User Information
         sessionManager = new SessionManager(ProfileActivity.this);
         showAllUserData();
-//        isLogin = FirebaseAuth.getInstance().getCurrentUser();
-//        if(isLogin != null) {
-//            reference = FirebaseDatabase.getInstance().getReference("Users");
-//            userID = isLogin.getUid();
-//            reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    User userProfile = snapshot.getValue(User.class);
-//
-//                    if(userProfile != null) {
-//                        String username = userProfile.username;
-//                        String fullname = userProfile.name;
-//                        String email = userProfile.email;
-//
-//                        tvUsername.setText(username);
-//                        tvFullName.setText(fullname);
-//                        tvEmail.setText(email);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                    Toast.makeText(ProfileActivity.this, "Something Wrong Happened!", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
 
-        // Firebase Instance
+        // Firebase Instance\
         mAuth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         Uid = mAuth.getCurrentUser().getUid();
+
+        // My Review RecyclerView=
+        rvMyReview = findViewById(R.id.rvMyReview);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvMyReview.setLayoutManager(linearLayoutManager);
+
+        // Set myReviewAdapter
+        myReviewAdapter = new ProfileSavedAdapter(this);
+
+        // myReviewModelList
+        myReviewModelList = new ArrayList<>();
 
         tvSaved.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,7 +171,6 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // Display Profile Image
         firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -190,14 +184,35 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // Retrieving Saved Place From Firebase
+        FirebaseDatabase.getInstance().getReference("MyReview").child(Uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                Log.e("KEY", String.valueOf(snapshot));
+                myReviewModelList.clear();
+                for(DataSnapshot savedLocationSnapshot: snapshot.getChildren()) {
+                    SavedLocationModel savedLocationModel = savedLocationSnapshot.getValue(SavedLocationModel.class);
+                    myReviewModelList.add(savedLocationModel);
+                }
+
+                myReviewAdapter.setData(myReviewModelList);
+                rvMyReview.setAdapter(myReviewAdapter);
+
+                if(!myReviewModelList.isEmpty()) {
+                    rvMyReview.setVisibility(View.VISIBLE);
+                    tvNoReviewYet.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void showAllUserData() {
-//        Intent intent = getIntent();
-//        String username = intent.getStringExtra("username");
-//        String fullname = intent.getStringExtra("fullname");
-//        String email = intent.getStringExtra("email");
-
         HashMap<String, String> userDetails = sessionManager.getUsersDetailFromSession();
 
         String username = userDetails.get(SessionManager.KEY_USERNAME);
@@ -217,38 +232,19 @@ public class ProfileActivity extends AppCompatActivity {
         finish();
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
-//        int id = menuItem.getItemId();
-//        if(id == R.id.nav_exit){
-//            AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-//            alert.setMessage("Are You Sure to Exit?");
-//            alert.setCancelable(true);
-//
-//            alert.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    finishAffinity();
-//                    System.exit(0);
-//                }
-//            });
-//
-//            alert.setPositiveButton("No", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.cancel();
-//                }
-//            });
-//
-//            AlertDialog alertDialog = alert.create();
-//            alertDialog.show();
-//        }
-//        return true;
-//    }
+    @Override
+    public void ClickedImage(SavedLocationModel savedLocationModel) {
+        Intent intent = new Intent(this, ExploreDetailActivity.class);
+        intent.putExtra("xid", savedLocationModel.getXid())
+                .putExtra("name", savedLocationModel.getName())
+                .putExtra("roadName", savedLocationModel.getRoadName())
+                .putExtra("county", savedLocationModel.getCounty())
+                .putExtra("country", savedLocationModel.getCountry())
+                .putExtra("postcode", savedLocationModel.getPostcode())
+                .putExtra("stateDistrict", savedLocationModel.getStateDistrict())
+                .putExtra("lon", savedLocationModel.getLon())
+                .putExtra("lat", savedLocationModel.getLat())
+                .putExtra("image", savedLocationModel.getImage());
+        startActivity(intent);
+    }
 }

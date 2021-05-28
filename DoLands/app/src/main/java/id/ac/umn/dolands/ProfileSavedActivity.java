@@ -97,20 +97,6 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
         reference = FirebaseDatabase.getInstance().getReference("Users");
         Uid = mAuth.getCurrentUser().getUid();
 
-        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()) {
-                    String username_img = task.getResult().getString("username");
-                    String imageUrl = task.getResult().getString("image");
-//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
-                    if(imageUrl != null) {
-                        Glide.with(ProfileSavedActivity.this).load(imageUrl).into(circleImageView);
-                    }
-                }
-            }
-        });
-
         // Go To My Review Activity
         tvMyReview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -197,6 +183,20 @@ public class ProfileSavedActivity extends AppCompatActivity implements ProfileSa
     @Override
     protected void onStart() {
         super.onStart();
+
+        firestore.collection("Users").document(Uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()) {
+                    String username_img = task.getResult().getString("username");
+                    String imageUrl = task.getResult().getString("image");
+//                    Log.e("PROFILE PIC", String.valueOf(imageUrl));
+                    if(imageUrl != null) {
+                        Glide.with(ProfileSavedActivity.this).load(imageUrl).into(circleImageView);
+                    }
+                }
+            }
+        });
 
         // Retrieving Saved Place From Firebase
         FirebaseDatabase.getInstance().getReference("SavedPlace").child(Uid).addValueEventListener(new ValueEventListener() {

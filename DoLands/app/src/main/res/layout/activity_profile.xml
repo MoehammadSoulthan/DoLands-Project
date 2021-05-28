@@ -182,16 +182,33 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/rvPlaceholder"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/no_review_yet"
-            android:textStyle="bold|italic"
-            android:textSize="20sp"
-            android:letterSpacing="0.05"
-            android:textColor="@color/gray"
-            android:fontFamily="@font/questrial"
-            android:gravity="center"/>
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center_horizontal">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvMyReview"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="0.9"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvNoReviewYet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/no_review_yet"
+                android:textStyle="bold|italic"
+                android:textSize="20sp"
+                android:letterSpacing="0.05"
+                android:textColor="@color/gray"
+                android:fontFamily="@font/questrial"
+                android:gravity="center"/>
+        </LinearLayout>
     </LinearLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
