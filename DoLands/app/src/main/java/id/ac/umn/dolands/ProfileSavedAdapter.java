@@ -75,13 +75,6 @@ public class ProfileSavedAdapter extends RecyclerView.Adapter<ProfileSavedAdapte
 
             attractImg = itemView.findViewById(R.id.attractImg);
             attractName = itemView.findViewById(R.id.attractName);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
         }
     }
 }

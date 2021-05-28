@@ -56,4 +56,5 @@
     <string name="cancel_text">Cancel</string>
     <string name="clear_all_confirmation">Are You Sure Want to Clear All Saved Attraction?</string>
     <string name="okay_text">Okay</string>
+    <string name="no_reviews_yet">No Reviews Yet</string>
 </resources>

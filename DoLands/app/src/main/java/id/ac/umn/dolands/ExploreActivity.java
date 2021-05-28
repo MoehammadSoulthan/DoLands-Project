@@ -364,15 +364,21 @@ public class ExploreActivity extends AppCompatActivity implements OnMapReadyCall
                             mGoogleMap.addMarker(options);
 
                             getNearbyPlaceDetail(locationInfoModels.get(i).getXid());
-                            Log.e("XID", locationInfoModels.get(i).getXid());
+//                            Log.e("XID", locationInfoModels.get(i).getXid());
                         }
                     }
                 }
 
-                if(locationInfoModels.size() == 0) {
-                    notFoundText.setVisibility(View.VISIBLE);
-                    rvPlaceholder.setVisibility(View.GONE);
+                try {
+                    if(locationInfoModels.size() == 0) {
+                        notFoundText.setVisibility(View.VISIBLE);
+                        rvPlaceholder.setVisibility(View.GONE);
+                    }
                 }
+                catch (NullPointerException e) {
+                    getCurrentLocation();
+                }
+
 
 //                if(locationInfoModels.size() > 0) {
 //                    LatLng LatLngNearby = new LatLng(locationInfoModels.get(10).getPoint().getLat(), locationInfoModels.get(10).getPoint().getLon());
