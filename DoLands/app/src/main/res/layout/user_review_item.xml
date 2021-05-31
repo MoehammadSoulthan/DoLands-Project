@@ -41,7 +41,7 @@
                 android:layout_marginTop="2dp"
                 android:text="@string/username"
                 android:fontFamily="@font/questrial"
-                android:textSize="12sp"
+                android:textSize="14sp"
                 android:letterSpacing="0.06"
                 android:textColor="@color/black"/>
         </LinearLayout>
@@ -64,7 +64,7 @@
             android:text="@string/isi_review"
             android:textColor="@color/black"
             android:fontFamily="@font/quicksand"
-            android:textSize="11sp"
+            android:textSize="13sp"
             android:letterSpacing="0.02"/>
     </LinearLayout>
 

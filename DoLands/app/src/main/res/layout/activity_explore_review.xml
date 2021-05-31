@@ -109,7 +109,7 @@
                 android:textColorHint="@color/gray_dark"
                 android:textColor="@color/black"
                 android:fontFamily="@font/quicksand"
-                android:textSize="12.5sp"
+                android:textSize="14sp"
                 android:gravity="top"/>
         </LinearLayout>
 
